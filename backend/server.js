@@ -1,24 +1,7 @@
-const express = require("express");
-const cors = require("cors");
 require("dotenv").config();
 
+const app = require("./app");
 const connectDB = require("./config/db");
-const pickupRoutes = require("./routes/pickups");
-const driverRoutes = require("./routes/drivers");
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.json({
-    message: "FoodLoop driver API is running",
-  });
-});
-
-app.use("/api/pickups", pickupRoutes);
-app.use("/api/drivers", driverRoutes);
 
 const PORT = process.env.PORT || 5000;
 
