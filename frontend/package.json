@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "axios": "^1.20.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.6"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
@@ -19,7 +21,7 @@
     "@rolldown/plugin-babel": "^0.2.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "@vitejs/plugin-react": "^6.1.0",
+    "@vitejs/plugin-react": "^6.1.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
