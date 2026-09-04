@@ -1,23 +1,80 @@
-import { useState } from 'react'
-import { availablePickups } from '../data/mockPickups'
+import { useEffect, useState } from 'react'
+import { confirmPickup, getAvailablePickups } from '../api/pickups'
 import PickupCard from '../components/delivery/PickupCard'
 import DeliveryMap from '../components/delivery/DeliveryMap'
 import './Delivery.css'
 
-export default function Delivery() {
-  const [selectedId, setSelectedId] = useState(availablePickups[0]?.id ?? null)
-  const [confirmedIds, setConfirmedIds] = useState([])
+function minutesUntil(expiresAt) {
+  if (!expiresAt) return null
+  const diffMs = new Date(expiresAt).getTime() - Date.now()
+  return Math.max(0, Math.ceil(diffMs / 60000))
+}
 
-  const pickups = availablePickups.filter((p) => !confirmedIds.includes(p.id))
+function mapPickup(pickup) {
+  return {
+    id: pickup._id,
+    donorName: pickup.donorName,
+    itemLabel: pickup.itemLabel,
+    weightKg: pickup.weightKg,
+    distanceKm: pickup.distanceKm,
+    locationLabel: pickup.locationLabel,
+    expiresInMinutes: minutesUntil(pickup.expiresAt),
+  }
+}
+
+export default function Delivery() {
+  const [pickups, setPickups] = useState([])
+  const [selectedId, setSelectedId] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [confirmingId, setConfirmingId] = useState(null)
+
+  useEffect(() => {
+    let active = true
+
+    async function loadPickups() {
+      setLoading(true)
+      setError('')
+      try {
+        const data = await getAvailablePickups()
+        if (!active) return
+        const mapped = (data.pickups || []).map(mapPickup)
+        setPickups(mapped)
+        setSelectedId(mapped[0]?.id ?? null)
+      } catch (err) {
+        if (!active) return
+        setError(err.message || 'Failed to load pickups')
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+
+    loadPickups()
+    return () => {
+      active = false
+    }
+  }, [])
+
   const selected = pickups.find((p) => p.id === selectedId) ?? pickups[0]
 
-  function handleConfirm(pickup) {
-    setConfirmedIds((prev) => [...prev, pickup.id])
-    setSelectedId((current) => {
-      if (current !== pickup.id) return current
-      const remaining = pickups.filter((p) => p.id !== pickup.id)
-      return remaining[0]?.id ?? null
-    })
+  async function handleConfirm(pickup) {
+    setConfirmingId(pickup.id)
+    setError('')
+    try {
+      await confirmPickup(pickup.id)
+      setPickups((prev) => {
+        const next = prev.filter((item) => item.id !== pickup.id)
+        setSelectedId((current) => {
+          if (current !== pickup.id) return current
+          return next[0]?.id ?? null
+        })
+        return next
+      })
+    } catch (err) {
+      setError(err.message || 'Failed to confirm pickup')
+    } finally {
+      setConfirmingId(null)
+    }
   }
 
   return (
@@ -31,8 +88,12 @@ export default function Delivery() {
             </span>
           </div>
 
+          {error && <p className="delivery-list__error">{error}</p>}
+
           <div className="delivery-list__items">
-            {pickups.length === 0 ? (
+            {loading ? (
+              <p className="delivery-list__empty">Loading available pickups...</p>
+            ) : pickups.length === 0 ? (
               <p className="delivery-list__empty">
                 No available pickups right now. Check back soon.
               </p>
@@ -45,7 +106,11 @@ export default function Delivery() {
                   }`}
                   onClick={() => setSelectedId(pickup.id)}
                 >
-                  <PickupCard pickup={pickup} onConfirm={handleConfirm} />
+                  <PickupCard
+                    pickup={pickup}
+                    confirming={confirmingId === pickup.id}
+                    onConfirm={handleConfirm}
+                  />
                 </div>
               ))
             )}
@@ -55,7 +120,7 @@ export default function Delivery() {
         <DeliveryMap
           currentLocation={
             selected
-              ? `${selected.locationLabel}, Sri Lanka`
+              ? `${selected.locationLabel || 'Gampaha'}, Sri Lanka`
               : 'Gampaha, Sri Lanka'
           }
         />
