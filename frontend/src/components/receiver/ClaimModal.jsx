@@ -1,38 +1,71 @@
 import React, { useState } from 'react';
+import './ClaimModal.css';
 
 const ClaimModal = ({ donation, onConfirm, onCancel }) => {
   const [quantity, setQuantity] = useState(1);
+  const maxQuantity = donation.remainingQuantity;
 
   const handleConfirm = () => {
-    if (quantity > 0 && quantity <= donation.max) {
-      onConfirm(donation.id, quantity);
-    } else {
-      alert(`Please enter a quantity between 1 and ${donation.max}`);
+    if (quantity < 1) {
+      alert('Please enter a quantity of at least 1.');
+      return;
     }
+    if (quantity > maxQuantity) {
+      alert(`Only ${maxQuantity} ${donation.unit} available.`);
+      return;
+    }
+    onConfirm(donation._id, quantity);
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0, left: 0, right: 0, bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.5)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}>
-      <div style={{ background: 'white', padding: '2rem', borderRadius: '8px', minWidth: '300px' }}>
-        <h3>Claim: {donation.name}</h3>
-        <p>Available: {donation.max}</p>
-        <input
-          type="number"
-          min="1"
-          max={donation.max}
-          value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
-        />
-        <div style={{ marginTop: '1rem' }}>
-          <button onClick={handleConfirm} style={{ marginRight: '1rem' }}>Confirm</button>
-          <button onClick={onCancel}>Cancel</button>
+    <div className="modal-overlay" onClick={onCancel}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>Claim Donation</h2>
+        <p className="food-name">{donation.foodName}</p>
+        <p className="available-info">
+          <strong>Available:</strong> {maxQuantity} {donation.unit}
+        </p>
+        <p className="donor-info">
+          <strong>From:</strong> {donation.donorId?.businessName || 'Unknown'}
+        </p>
+
+        <div className="quantity-control">
+          <label htmlFor="quantity">How many {donation.unit} do you need?</label>
+          <div className="quantity-input-group">
+            <button
+              type="button"
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              disabled={quantity <= 1}
+            >
+              −
+            </button>
+            <input
+              id="quantity"
+              type="number"
+              min="1"
+              max={maxQuantity}
+              value={quantity}
+              onChange={(e) => {
+                const val = parseInt(e.target.value) || 1;
+                setQuantity(Math.min(maxQuantity, Math.max(1, val)));
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setQuantity(Math.min(maxQuantity, quantity + 1))}
+              disabled={quantity >= maxQuantity}
+            >
+              +
+            </button>
+          </div>
+          <p className="helper-text">Max: {maxQuantity} {donation.unit}</p>
+        </div>
+
+        <div className="modal-actions">
+          <button className="btn-cancel" onClick={onCancel}>Cancel</button>
+          <button className="btn-confirm" onClick={handleConfirm}>
+            Confirm Claim
+          </button>
         </div>
       </div>
     </div>

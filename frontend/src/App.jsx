@@ -34,10 +34,11 @@ function App() {
           path="/receiver"
           element={
             <PrivateRoute allowedRoles={['receiver']}>
-              <ReceiverDashboard />
+            <ReceiverDashboard />
             </PrivateRoute>
           }
         />
+        
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,167 @@
+/* src/components/receiver/ClaimModal.css */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #064e3b;
+  margin-bottom: 0.5rem;
+}
+
+.modal-content .food-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.modal-content .available-info {
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+.modal-content .donor-info {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.quantity-control {
+  margin: 1.5rem 0;
+}
+
+.quantity-control label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.quantity-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 180px;
+}
+
+.quantity-input-group button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  background: #f9fafb;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-input-group button:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #10b981;
+}
+
+.quantity-input-group button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.quantity-input-group input {
+  width: 60px;
+  height: 40px;
+  text-align: center;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  padding: 0;
+}
+
+.quantity-input-group input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.helper-text {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 0.75rem;
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.btn-confirm {
+  flex: 1;
+  padding: 0.75rem;
+  background: #10b981;
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-confirm:hover {
+  background: #059669;
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.5rem;
+  }
+  .modal-actions {
+    flex-direction: column;
+  }
+}
