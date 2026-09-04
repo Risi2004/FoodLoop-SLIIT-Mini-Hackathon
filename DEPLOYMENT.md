@@ -94,9 +94,10 @@ Expand the **Environment Variables** section and add:
 
 | Key | Value |
 | :--- | :--- |
-| `VITE_API_BASE_URL` | `https://your-backend-name.onrender.com/api` |
+| `VITE_API_URL` | `https://your-backend-name.onrender.com` |
+| `VITE_API_BASE_URL` | `https://your-backend-name.onrender.com/api` *(optional alias)* |
 
-*(Replace with your actual Render backend URL followed by `/api`)*.
+Set **at least one**. Prefer `VITE_API_URL` (server root, no `/api`). Redeploy the frontend after changing env vars — Vite bakes them in at build time.
 
 ### Step 4: Deploy
 Click **Deploy**. Vercel will build and assign your production domain (e.g., `https://foodloop-frontend.vercel.app`).

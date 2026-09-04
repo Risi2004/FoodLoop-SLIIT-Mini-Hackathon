@@ -5,6 +5,10 @@ const ApiError = require('../utils/ApiError');
 const crypto = require('crypto');
 const { USER_ROLES } = require('../config/constants');
 const driverService = require('./driver.service');
+const {
+  ensureDonorForUser,
+  ensureReceiverForUser,
+} = require('./roleProfile.service');
 
 class AuthService {
   /**
@@ -78,9 +82,13 @@ class AuthService {
     // 4. Save user
     const createdUser = await User.create(newUserObj);
 
-    // 4b. Create logistics Driver profile for pickup flows
+    // 4b. Create role profiles used by donations / pickups
     if (userData.role === USER_ROLES.DRIVER) {
       await driverService.ensureDriverForUser(createdUser);
+    } else if (userData.role === USER_ROLES.DONOR) {
+      await ensureDonorForUser(createdUser);
+    } else if (userData.role === USER_ROLES.RECEIVER) {
+      await ensureReceiverForUser(createdUser);
     }
 
     // 5. Generate Auth Token
@@ -113,9 +121,14 @@ class AuthService {
 
     const token = tokenService.generateToken(user);
 
-    // Ensure logistics profile exists for registered drivers
-    if (String(user.role).toUpperCase() === USER_ROLES.DRIVER) {
+    // Ensure role profiles exist for older accounts created before bridging
+    const role = String(user.role).toUpperCase();
+    if (role === USER_ROLES.DRIVER) {
       await driverService.ensureDriverForUser(user);
+    } else if (role === USER_ROLES.DONOR) {
+      await ensureDonorForUser(user);
+    } else if (role === USER_ROLES.RECEIVER) {
+      await ensureReceiverForUser(user);
     }
 
     // Remove password from returned object

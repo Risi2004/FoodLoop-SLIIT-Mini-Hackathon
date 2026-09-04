@@ -93,4 +93,4 @@ After login: Driver → `/driver` · Donor → `/donor` · Receiver → `/receiv
 
 ## License
 
-Academic / hackathon project — FoodLoop · HyperNova
+Academic / hackathon project — FoodLoop · SE_015

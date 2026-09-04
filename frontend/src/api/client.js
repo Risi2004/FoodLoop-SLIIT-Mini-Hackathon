@@ -1,4 +1,22 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+/**
+ * Resolve API server root (no trailing /api).
+ * Supports Vercel `VITE_API_BASE_URL` (.../api) and local `VITE_API_URL` (server root).
+ */
+function resolveApiRoot() {
+  const explicit = import.meta.env.VITE_API_BASE_URL
+  const root = import.meta.env.VITE_API_URL
+
+  let base = explicit || root || 'http://localhost:5000'
+  base = String(base).replace(/\/+$/, '')
+
+  if (base.endsWith('/api')) {
+    base = base.slice(0, -4)
+  }
+
+  return base || 'http://localhost:5000'
+}
+
+const API_URL = resolveApiRoot()
 
 function getAuthToken() {
   return (
@@ -10,7 +28,8 @@ function getAuthToken() {
 
 export async function apiRequest(path, options = {}) {
   const token = getAuthToken()
-  const response = await fetch(`${API_URL}${path}`, {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+  const response = await fetch(`${API_URL}${normalizedPath}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',

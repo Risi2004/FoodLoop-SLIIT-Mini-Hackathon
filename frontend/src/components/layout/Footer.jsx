@@ -68,7 +68,7 @@ export default function Footer({ role = null }) {
 
         <div className="fl-footer__credit">
           <p>
-            Designed &amp; Developed by <strong>HyperNova</strong>
+            Designed &amp; Developed by <strong>SE_015</strong>
           </p>
         </div>
       </div>

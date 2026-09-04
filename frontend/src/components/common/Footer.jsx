@@ -80,7 +80,7 @@ export default function Footer() {
           <div className="footer-credit-col">
             <div className="developed-by-box">
               <span className="dev-label">Designed & Developed by</span>
-              <span className="dev-name">HyperNova</span>
+              <span className="dev-name">SE_015</span>
             </div>
           </div>
         </div>
