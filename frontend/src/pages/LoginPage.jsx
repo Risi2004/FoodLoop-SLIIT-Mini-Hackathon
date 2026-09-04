@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Leaf, Eye, EyeOff, HeartHandshake, ArrowLeft } from 'lucide-react';
+import { Leaf, Eye, EyeOff, HeartHandshake, ArrowLeft, AlertCircle } from 'lucide-react';
+import authService from '../services/auth.service';
 import loginHeroImg from '../assets/images/login.png';
 import './LoginPage.css';
 
@@ -13,15 +14,21 @@ export default function LoginPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      alert(`Welcome back! Logged in with ${formData.identifier}`);
+
+    try {
+      await authService.login(formData.identifier, formData.password);
       navigate('/');
-    }, 1000);
+    } catch (err) {
+      setErrorMessage(err.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,6 +61,13 @@ export default function LoginPage() {
 
           {/* Green Form Card */}
           <div className="login-card">
+            {errorMessage && (
+              <div className="auth-error-banner">
+                <AlertCircle size={18} className="error-banner-icon" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="login-form">
               <div className="auth-field-group">
                 <label htmlFor="identifier">Email or Username</label>

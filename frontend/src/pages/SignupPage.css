@@ -212,6 +212,26 @@
   margin-bottom: 20px;
 }
 
+.signup-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.error-banner-icon {
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
 /* Main Form */
 .signup-main-form {
   width: 100%;

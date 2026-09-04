@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { User, Camera, ArrowLeft, Package, CheckCircle2 } from 'lucide-react';
+import { User, Camera, ArrowLeft, Package, CheckCircle2, AlertCircle } from 'lucide-react';
 import RoleSwitcher from '../components/auth/RoleSwitcher';
 import FileUploadField from '../components/auth/FileUploadField';
+import authService from '../services/auth.service';
 
 import donorHeroImg from '../assets/images/donor.png';
 import receiverHeroImg from '../assets/images/receiver.png';
@@ -29,13 +30,13 @@ export default function SignupPage() {
     
     // Donor specific
     businessName: '',
-    businessType: '',
+    donorType: 'Restaurant',
     donorBusinessReg: null,
     donorAddressProof: null,
 
     // Receiver specific
     receiverName: '',
-    receiverType: '',
+    receiverType: 'NGO',
     receiverBusinessReg: null,
     receiverAddressProof: null,
 
@@ -49,9 +50,11 @@ export default function SignupPage() {
 
   const [profilePreview, setProfilePreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
   const handleRoleChange = (newRole) => {
+    setErrorMessage('');
     navigate(`/signup/${newRole}`);
   };
 
@@ -63,17 +66,76 @@ export default function SignupPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
+
     if (formData.password !== formData.retypePassword) {
-      alert("Passwords do not match!");
+      setErrorMessage("Passwords do not match!");
       return;
     }
+
+    if (formData.password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters long.");
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      // Build multipart FormData for backend Cloudflare R2 file processing
+      const dataPayload = new FormData();
+      
+      // Common fields
+      const upperRole = currentRole.toUpperCase(); // 'DONOR', 'RECEIVER', 'DRIVER'
+      dataPayload.append('role', upperRole);
+      dataPayload.append('email', formData.email.trim());
+      dataPayload.append('password', formData.password);
+      dataPayload.append('contactNo', formData.contactNo.trim());
+      dataPayload.append('address', formData.address.trim());
+
+      if (formData.profilePhoto) {
+        dataPayload.append('profilePhoto', formData.profilePhoto);
+      }
+
+      // Role specific fields & files
+      if (currentRole === 'donor') {
+        dataPayload.append('businessName', formData.businessName.trim());
+        dataPayload.append('donorType', formData.donorType);
+        if (formData.donorBusinessReg) {
+          dataPayload.append('businessRegistrationDocument', formData.donorBusinessReg);
+        }
+        if (formData.donorAddressProof) {
+          dataPayload.append('addressProof', formData.donorAddressProof);
+        }
+      } else if (currentRole === 'receiver') {
+        dataPayload.append('receiverName', formData.receiverName.trim());
+        dataPayload.append('receiverType', formData.receiverType);
+        if (formData.receiverBusinessReg) {
+          dataPayload.append('businessRegistrationDocument', formData.receiverBusinessReg);
+        }
+        if (formData.receiverAddressProof) {
+          dataPayload.append('addressProof', formData.receiverAddressProof);
+        }
+      } else if (currentRole === 'driver') {
+        dataPayload.append('driverName', formData.driverName.trim());
+        dataPayload.append('vehicleType', formData.vehicleType);
+        dataPayload.append('vehicleNumber', formData.vehicleNumber.trim());
+        if (formData.driverNic) {
+          dataPayload.append('nicFrontBack', formData.driverNic);
+        }
+        if (formData.driverLicense) {
+          dataPayload.append('drivingLicenseFrontBack', formData.driverLicense);
+        }
+      }
+
+      await authService.register(dataPayload);
       setIsSuccess(true);
-    }, 1200);
+    } catch (err) {
+      setErrorMessage(err.message || 'Registration failed. Please check your details.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Role Metadata
@@ -178,6 +240,7 @@ export default function SignupPage() {
               <div 
                 className="profile-photo-circle"
                 onClick={() => profileInputRef.current?.click()}
+                title="Click to upload profile photo"
               >
                 {profilePreview ? (
                   <img src={profilePreview} alt="Profile" className="profile-preview-img" />
@@ -210,13 +273,21 @@ export default function SignupPage() {
               />
             </div>
 
+            {/* Error Message Banner */}
+            {errorMessage && (
+              <div className="signup-error-banner">
+                <AlertCircle size={18} className="error-banner-icon" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
             {/* Success State or Form */}
             {isSuccess ? (
               <div className="signup-success-view">
                 <CheckCircle2 size={64} className="success-check-icon" />
                 <h2>Account Created Successfully!</h2>
                 <p>
-                  Welcome to FoodLoop. Your {currentRole} registration has been submitted for instant verification.
+                  Welcome to FoodLoop. Your <strong>{currentRole}</strong> registration has been submitted and verified.
                 </p>
                 <button className="goto-login-btn" onClick={() => navigate('/login')}>
                   Proceed to Login
@@ -240,20 +311,20 @@ export default function SignupPage() {
                         />
                       </div>
                       <div className="signup-field-group">
-                        <label htmlFor="businessType">Business Type</label>
+                        <label htmlFor="donorType">Business Type</label>
                         <select 
-                          id="businessType"
-                          value={formData.businessType}
-                          onChange={(e) => setFormData({...formData, businessType: e.target.value})}
+                          id="donorType"
+                          value={formData.donorType}
+                          onChange={(e) => setFormData({...formData, donorType: e.target.value})}
                           required
                         >
-                          <option value="">Select</option>
-                          <option value="Restaurant">Restaurant / Cafe</option>
-                          <option value="Supermarket">Supermarket / Grocery</option>
-                          <option value="Bakery">Bakery / Confectionery</option>
-                          <option value="Hotel">Hotel / Catering</option>
+                          <option value="Restaurant">Restaurant</option>
+                          <option value="Wedding Hall">Wedding Hall</option>
+                          <option value="Supermarket">Supermarket</option>
+                          <option value="Bakery">Bakery</option>
+                          <option value="Hotel">Hotel</option>
                           <option value="Event Organizer">Event Organizer</option>
-                          <option value="Individual">Individual Donor</option>
+                          <option value="Individual">Individual</option>
                         </select>
                       </div>
                     </div>
@@ -331,13 +402,13 @@ export default function SignupPage() {
                           onChange={(e) => setFormData({...formData, receiverType: e.target.value})}
                           required
                         >
-                          <option value="">Select</option>
-                          <option value="Registered NGO">Registered NGO</option>
-                          <option value="Community Kitchen">Community / Soup Kitchen</option>
-                          <option value="Orphanage">Orphanage / Children Home</option>
-                          <option value="Elder Home">Elders Care Home</option>
-                          <option value="Shelter">Homeless Shelter</option>
-                          <option value="School Feeding">School Feeding Program</option>
+                          <option value="NGO">NGO</option>
+                          <option value="Food Bank">Food Bank</option>
+                          <option value="Community Kitchen">Community Kitchen</option>
+                          <option value="Orphanage">Orphanage</option>
+                          <option value="Elder Home">Elder Home</option>
+                          <option value="Shelter">Shelter</option>
+                          <option value="School Feeding Program">School Feeding Program</option>
                         </select>
                       </div>
                     </div>
