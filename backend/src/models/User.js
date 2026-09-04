@@ -41,12 +41,10 @@ const UserSchema = new mongoose.Schema({
   },
   contactNo: {
     type: String,
-    required: [true, 'Contact number is required'],
     trim: true
   },
   address: {
     type: String,
-    required: [true, 'Address is required'],
     trim: true
   },
   profilePhoto: {
@@ -57,6 +55,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: Object.values(ACCOUNT_STATUS),
     default: ACCOUNT_STATUS.VERIFIED
+  },
+  profileId: {
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: 'role'
   },
 
   // Role: DONOR Specific Fields

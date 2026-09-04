@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
+
 const authRoutes = require('./auth.routes');
+const donorRoutes = require('./donorRoutes');
+const receiverRoutes = require('./receiverRoutes');
+const donationRoutes = require('./donationRoutes');
 
 // Healthcheck Route
 router.get('/health', (req, res) => {
@@ -11,7 +15,10 @@ router.get('/health', (req, res) => {
   });
 });
 
-// Authentication Routes Mount
+// Mount Routes
 router.use('/auth', authRoutes);
+router.use('/donors', donorRoutes);
+router.use('/receivers', receiverRoutes);
+router.use('/donations', donationRoutes);
 
 module.exports = router;
