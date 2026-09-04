@@ -1,8 +1,7 @@
-import {
-  completedPickups,
-  driverStats,
-  inTransitPickup,
-} from '../data/mockDriverPickups'
+import { useEffect, useState } from 'react'
+import { getDriverId } from '../api/client'
+import { getDriver } from '../api/drivers'
+import { getMyPickups } from '../api/pickups'
 import StatCard from '../components/pickups/StatCard'
 import ImpactProgress from '../components/pickups/ImpactProgress'
 import InTransitBanner from '../components/pickups/InTransitBanner'
@@ -27,7 +26,85 @@ const routeIcon = (
   </svg>
 )
 
+function formatStatus(status) {
+  if (status === 'in_transit') return 'In Transit'
+  if (status === 'completed') return 'Supplied'
+  return status
+}
+
+function formatDeliveredLabel(updatedAt) {
+  if (!updatedAt) return 'Delivered recently'
+  const date = new Date(updatedAt)
+  return `Delivered ${date.toLocaleDateString()}`
+}
+
 export default function MyPickups() {
+  const [stats, setStats] = useState(null)
+  const [inTransit, setInTransit] = useState([])
+  const [completed, setCompleted] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let active = true
+
+    async function load() {
+      setLoading(true)
+      setError('')
+      try {
+        const driverId = getDriverId()
+        if (!driverId) {
+          throw new Error(
+            'VITE_DRIVER_ID is missing. Run backend seed and set it in frontend/.env'
+          )
+        }
+
+        const [driver, pickups] = await Promise.all([
+          getDriver(driverId),
+          getMyPickups(),
+        ])
+
+        if (!active) return
+
+        setStats(driver.stats || {})
+        setInTransit(
+          (pickups.inTransit || []).map((pickup) => ({
+            id: pickup._id,
+            trackingId: pickup.trackingId,
+            donorName: pickup.donorName,
+            itemLabel: pickup.itemLabel,
+            weightKg: pickup.weightKg,
+            distanceKm: pickup.distanceKm,
+            etaMinutes: pickup.etaMinutes ?? 15,
+            status: formatStatus(pickup.status),
+          }))
+        )
+        setCompleted(
+          (pickups.completed || []).map((pickup) => ({
+            id: pickup._id,
+            donorName: pickup.donorName,
+            itemLabel: pickup.itemLabel,
+            weightKg: pickup.weightKg,
+            distanceKm: pickup.distanceKm,
+            deliveredLabel: formatDeliveredLabel(pickup.updatedAt),
+          }))
+        )
+      } catch (err) {
+        if (!active) return
+        setError(err.message || 'Failed to load pickups')
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+
+    load()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const activePickup = inTransit[0] || null
+
   return (
     <div className="page my-pickups-page">
       <div className="my-pickups-page__layout">
@@ -36,36 +113,51 @@ export default function MyPickups() {
 
           <StatCard
             label="Deliveries Completed"
-            value={driverStats.deliveriesCompleted}
-            trend={driverStats.deliveriesTrend}
+            value={stats?.deliveriesCompleted ?? '—'}
+            trend="+12% this month"
             icon={truckIcon}
           />
           <StatCard
             label="Distance Traveled"
-            value={`${driverStats.distanceKm} KM`}
-            trend={driverStats.distanceTrend}
+            value={stats ? `${stats.distanceKm} KM` : '—'}
+            trend="+5% vs average"
             icon={routeIcon}
           />
           <ImpactProgress
-            current={driverStats.impactCurrent}
-            goal={driverStats.impactGoal}
-            badge={driverStats.impactBadge}
+            current={stats?.impactCurrent ?? 0}
+            goal={stats?.impactGoal ?? 15}
+            badge={stats?.impactBadge ?? 'Community Hero'}
           />
         </aside>
 
         <div className="my-pickups-main">
+          {error && <p className="my-pickups-error">{error}</p>}
+          {loading && <p className="my-pickups-status">Loading your pickups...</p>}
+
           <section className="my-pickups-section">
             <h2>In Transit Pickups</h2>
-            <InTransitBanner pickup={inTransitPickup} />
+            {activePickup ? (
+              <InTransitBanner pickup={activePickup} />
+            ) : (
+              !loading && (
+                <p className="my-pickups-empty">No pickups in transit right now.</p>
+              )
+            )}
           </section>
 
           <section className="my-pickups-section">
             <h2>Completed History</h2>
-            <div className="my-pickups-history">
-              {completedPickups.map((pickup) => (
-                <HistoryCard key={pickup.id} pickup={pickup} />
-              ))}
-            </div>
+            {completed.length > 0 ? (
+              <div className="my-pickups-history">
+                {completed.map((pickup) => (
+                  <HistoryCard key={pickup.id} pickup={pickup} />
+                ))}
+              </div>
+            ) : (
+              !loading && (
+                <p className="my-pickups-empty">No completed deliveries yet.</p>
+              )
+            )}
           </section>
         </div>
       </div>

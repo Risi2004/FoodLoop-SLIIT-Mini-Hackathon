@@ -34,6 +34,27 @@
   margin-bottom: 0.75rem;
 }
 
+.my-pickups-error {
+  background: #fde8e8;
+  border: 1px solid #f5b5b5;
+  border-radius: var(--fl-radius-sm);
+  color: var(--fl-danger);
+  padding: 0.7rem 0.85rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.my-pickups-status,
+.my-pickups-empty {
+  background: var(--fl-surface);
+  border: 1px dashed var(--fl-border);
+  border-radius: var(--fl-radius);
+  padding: 1rem;
+  color: var(--fl-text-muted);
+  margin-bottom: 0.75rem;
+}
+
 .my-pickups-history {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
