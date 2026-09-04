@@ -1,0 +1,273 @@
+.vision-mission-section {
+  padding: 80px 0;
+  background-color: var(--bg-body);
+}
+
+.section-header {
+  max-width: 780px;
+  margin: 0 auto 50px auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #0f2e22;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  margin-bottom: 16px;
+}
+
+.highlight-green {
+  color: #16a34a;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+/* Bento Grid */
+.vision-mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.bento-card {
+  border-radius: var(--radius-xl);
+  padding: 36px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Vision Card */
+.vision-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.card-icon-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbulb-badge {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.bulb-icon {
+  color: #10b981;
+}
+
+.card-number {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f2e22;
+  opacity: 0.8;
+}
+
+.card-number.light {
+  color: #ffffff;
+  opacity: 0.85;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f2e22;
+  margin-bottom: 14px;
+}
+
+.card-title.light {
+  color: #ffffff;
+}
+
+.card-body-text {
+  font-size: 0.98rem;
+  color: #475569;
+  line-height: 1.65;
+}
+
+.card-body-text.light {
+  color: #e2e8f0;
+}
+
+/* Mission Card (Right Tall Card) */
+.mission-card {
+  background: linear-gradient(145deg, #103b2b 0%, #082117 100%);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  box-shadow: 0 14px 40px rgba(10, 38, 28, 0.2);
+  grid-row: span 2;
+}
+
+.box-badge {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+}
+
+.box-icon {
+  color: #4ade80;
+}
+
+.mission-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.mission-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.mission-list strong {
+  color: #ffffff;
+  display: inline;
+}
+
+.check-bullet {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #10b981;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Matters Card */
+.matters-card {
+  background: linear-gradient(135deg, #15803d 0%, #0f3d2e 100%);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  box-shadow: 0 10px 30px rgba(16, 59, 43, 0.15);
+}
+
+.link-badge {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin-bottom: 20px;
+}
+
+.link-icon {
+  color: #ffffff;
+}
+
+/* CTA Card */
+.cta-card {
+  grid-column: span 2;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 44px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.cta-headline {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f2e22;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.cta-tagline {
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 28px;
+}
+
+.cta-button-group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cta-volunteer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #0f2e22;
+  color: #ffffff;
+  padding: 12px 28px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 16px rgba(15, 46, 34, 0.2);
+}
+
+.cta-volunteer-btn:hover {
+  background: #164234;
+  transform: translateY(-2px);
+}
+
+.cta-donate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #16a34a;
+  color: #ffffff;
+  padding: 12px 28px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3);
+}
+
+.cta-donate-btn:hover {
+  background: #15803d;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 860px) {
+  .vision-mission-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .mission-card {
+    grid-row: auto;
+  }
+  
+  .cta-card {
+    grid-column: auto;
+  }
+  
+  .section-title {
+    font-size: 2.1rem;
+  }
+}

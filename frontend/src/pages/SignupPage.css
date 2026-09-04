@@ -1,0 +1,348 @@
+.signup-split-container {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Left Image Side */
+.signup-image-side {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #0f2e22;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px;
+}
+
+.signup-side-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.signup-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(7, 25, 18, 0.4) 40%,
+    rgba(7, 25, 18, 0.88) 85%,
+    rgba(7, 25, 18, 0.96) 100%
+  );
+}
+
+.signup-top-badge {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 10;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.signup-image-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signup-image-headline {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.text-green-highlight {
+  color: #22c55e;
+}
+
+.signup-image-subtext {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.55;
+  max-width: 480px;
+}
+
+.active-donors-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.donor-avatar-stack {
+  display: flex;
+  align-items: center;
+}
+
+.donor-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fef08a;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -8px;
+  color: #854d0e;
+}
+
+.donor-avatar-circle:first-child {
+  margin-left: 0;
+}
+
+.active-donors-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Right Form Side */
+.signup-form-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 40px;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+.signup-form-inner {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-page-title {
+  font-size: 1.95rem;
+  font-weight: 800;
+  color: #1b4332;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+/* Profile Photo */
+.profile-upload-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.profile-photo-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #1b4332;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(27, 67, 50, 0.25);
+  transition: transform 0.2s ease;
+  overflow: hidden;
+}
+
+.profile-photo-circle:hover {
+  transform: scale(1.05);
+}
+
+.profile-default-icon {
+  color: #ffffff;
+}
+
+.profile-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-cam-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #10b981;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+
+.profile-upload-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f2e22;
+}
+
+.role-switcher-wrap {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Main Form */
+.signup-main-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.signup-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.signup-field-group label {
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1b4332;
+}
+
+.signup-field-group input,
+.signup-field-group select {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: #0f2e22;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.signup-field-group input::placeholder {
+  color: #9ca3af;
+}
+
+.signup-field-group input:focus,
+.signup-field-group select:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.create-account-btn {
+  background: #1b4332;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 13px;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 6px 16px rgba(27, 67, 50, 0.2);
+  transition: all 0.25s ease;
+}
+
+.create-account-btn:hover:not(:disabled) {
+  background: #16a34a;
+  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
+  transform: translateY(-1px);
+}
+
+.signup-footer-bar {
+  text-align: center;
+  font-size: 0.88rem;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+.signin-link {
+  color: #16a34a;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.signin-link:hover {
+  text-decoration: underline;
+}
+
+/* Success View */
+.signup-success-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  gap: 16px;
+}
+
+.success-check-icon {
+  color: #16a34a;
+  animation: pulse 2s infinite;
+}
+
+.signup-success-view h2 {
+  font-size: 1.5rem;
+  color: #0f2e22;
+}
+
+.signup-success-view p {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.goto-login-btn {
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: var(--radius-full);
+  margin-top: 10px;
+}
+
+.goto-login-btn:hover {
+  background: #15803d;
+}
+
+@media (max-width: 960px) {
+  .signup-split-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .signup-image-side {
+    display: none;
+  }
+}
