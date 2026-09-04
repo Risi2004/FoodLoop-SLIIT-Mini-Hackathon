@@ -1,0 +1,59 @@
+.my-pickups-page {
+  padding-top: 1.5rem;
+}
+
+.my-pickups-page__layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) 1fr;
+  gap: 1.35rem;
+  align-items: start;
+}
+
+.my-pickups-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.my-pickups-sidebar h1 {
+  font-size: 1.4rem;
+  color: var(--fl-green-800);
+  margin-bottom: 0.15rem;
+}
+
+.my-pickups-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.my-pickups-section h2 {
+  font-size: 1.15rem;
+  color: var(--fl-text);
+  margin-bottom: 0.75rem;
+}
+
+.my-pickups-history {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+@media (max-width: 1000px) {
+  .my-pickups-history {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .my-pickups-page__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .my-pickups-history {
+    grid-template-columns: 1fr;
+  }
+}
