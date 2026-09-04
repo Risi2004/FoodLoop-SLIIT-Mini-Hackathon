@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from '../api/axiosInstance';
+import './Register.css';  // <-- import the new styles
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -13,6 +14,11 @@ const Register = () => {
     businessType: 'restaurant',
     kitchenAddress: '',
     contactPhone: '',
+    // fields for receiver (add these for completeness)
+    orgName: '',
+    orgType: 'ngo',
+    registrationNumber: '',
+    pickupAddress: '',
   });
   const [error, setError] = useState('');
   const { login } = useAuth();
@@ -35,50 +41,176 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-        <input name="password" placeholder="Password" type="password" value={form.password} onChange={handleChange} required />
-        <select name="role" value={form.role} onChange={handleChange}>
-          <option value="donor">Donor (Hotel/Restaurant)</option>
-          <option value="receiver">Receiver (NGO/Charity)</option>
-        </select>
+    <div className="register-page">
+      <div className="register-container">
+        <h1>Create Account</h1>
+        <form onSubmit={handleSubmit}>
+          {/* Role Selection */}
+          <div className="form-group">
+            <label>Your Role</label>
+            <div className="role-options">
+              <label>
+                <input
+                  type="radio"
+                  name="role"
+                  value="donor"
+                  checked={form.role === 'donor'}
+                  onChange={handleChange}
+                />
+                Donor
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="role"
+                  value="receiver"
+                  checked={form.role === 'receiver'}
+                  onChange={handleChange}
+                />
+                Receiver
+              </label>
+            </div>
+          </div>
 
-        {form.role === 'donor' && (
-          <>
-            <input name="businessName" placeholder="Business Name" value={form.businessName} onChange={handleChange} required />
-            <input name="fssaiLicense" placeholder="FSSAI License" value={form.fssaiLicense} onChange={handleChange} required />
-            <select name="businessType" value={form.businessType} onChange={handleChange}>
-              <option value="hotel">Hotel</option>
-              <option value="restaurant">Restaurant</option>
-              <option value="caterer">Caterer</option>
-              <option value="other">Other</option>
-            </select>
-            <input name="kitchenAddress" placeholder="Kitchen Address" value={form.kitchenAddress} onChange={handleChange} />
-            <input name="contactPhone" placeholder="Contact Phone" value={form.contactPhone} onChange={handleChange} />
-          </>
-        )}
+          {/* Email */}
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              name="email"
+              type="email"
+              placeholder="john@example.com"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        {form.role === 'receiver' && (
-          <>
-            <input name="orgName" placeholder="Organization Name" value={form.orgName} onChange={handleChange} required />
-            <select name="orgType" value={form.orgType || 'ngo'} onChange={handleChange}>
-              <option value="ngo">NGO</option>
-              <option value="soup_kitchen">Soup Kitchen</option>
-              <option value="religious">Religious Institute</option>
-              <option value="community_center">Community Center</option>
-              <option value="other">Other</option>
-            </select>
-            <input name="registrationNumber" placeholder="Registration Number" value={form.registrationNumber} onChange={handleChange} />
-            <input name="pickupAddress" placeholder="Pickup Address" value={form.pickupAddress} onChange={handleChange} />
-            <input name="contactPhone" placeholder="Contact Phone" value={form.contactPhone} onChange={handleChange} />
-          </>
-        )}
+          {/* Password */}
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="********"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <button type="submit">Register</button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
+          {/* Conditional fields for donor */}
+          {form.role === 'donor' && (
+            <>
+              <div className="form-group">
+                <label>Business Name</label>
+                <input
+                  name="businessName"
+                  placeholder="Your hotel/restaurant name"
+                  value={form.businessName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>FSSAI License</label>
+                <input
+                  name="fssaiLicense"
+                  placeholder="License number"
+                  value={form.fssaiLicense}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Business Type</label>
+                <select name="businessType" value={form.businessType} onChange={handleChange}>
+                  <option value="hotel">Hotel</option>
+                  <option value="restaurant">Restaurant</option>
+                  <option value="caterer">Caterer</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Kitchen Address</label>
+                <input
+                  name="kitchenAddress"
+                  placeholder="Address"
+                  value={form.kitchenAddress}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Contact Phone</label>
+                <input
+                  name="contactPhone"
+                  placeholder="Phone number"
+                  value={form.contactPhone}
+                  onChange={handleChange}
+                />
+              </div>
+            </>
+          )}
+
+          {/* Conditional fields for receiver */}
+          {form.role === 'receiver' && (
+            <>
+              <div className="form-group">
+                <label>Organization Name</label>
+                <input
+                  name="orgName"
+                  placeholder="NGO / Charity name"
+                  value={form.orgName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Organization Type</label>
+                <select name="orgType" value={form.orgType} onChange={handleChange}>
+                  <option value="ngo">NGO</option>
+                  <option value="soup_kitchen">Soup Kitchen</option>
+                  <option value="religious">Religious Institute</option>
+                  <option value="community_center">Community Center</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Registration Number</label>
+                <input
+                  name="registrationNumber"
+                  placeholder="Reg. number"
+                  value={form.registrationNumber}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Pickup Address</label>
+                <input
+                  name="pickupAddress"
+                  placeholder="Address"
+                  value={form.pickupAddress}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Contact Phone</label>
+                <input
+                  name="contactPhone"
+                  placeholder="Phone number"
+                  value={form.contactPhone}
+                  onChange={handleChange}
+                />
+              </div>
+            </>
+          )}
+
+          {error && <p className="error">{error}</p>}
+          <button type="submit" className="btn-primary">Register</button>
+        </form>
+        <p className="login-link">
+          Already have an account? <Link to="/login">Sign In</Link>
+        </p>
+      </div>
     </div>
   );
 };

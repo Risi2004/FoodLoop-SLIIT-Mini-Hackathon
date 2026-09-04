@@ -1,0 +1,80 @@
+/* ----- Donation list section ----- */
+.donation-list-section {
+  margin-top: 3rem;
+}
+
+.donation-list-section h2 {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.empty-message {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.donation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.donation-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.donation-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}
+
+.donation-card h3 {
+  font-size: 1.25rem;
+  color: #064e3b;
+  margin-bottom: 0.5rem;
+}
+
+.donation-card p {
+  margin: 0.3rem 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-left: 0.3rem;
+}
+
+.status-badge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.fulfilled {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.expired {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.pickup-address {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.5rem;
+}

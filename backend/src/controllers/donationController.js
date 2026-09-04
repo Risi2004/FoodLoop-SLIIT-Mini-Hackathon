@@ -103,3 +103,19 @@ exports.claimDonation = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+// Get all donations for the logged-in donor
+exports.getDonorDonations = async (req, res) => {
+  try {
+    const donor = await Donor.findOne({ userId: req.user.id });
+    if (!donor) {
+      return res.status(403).json({ error: 'Donor profile not found' });
+    }
+    const donations = await Donation.find({ donorId: donor._id })
+      .sort({ createdAt: -1 });
+    res.json(donations);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};

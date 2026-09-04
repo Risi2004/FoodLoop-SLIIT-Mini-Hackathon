@@ -1,0 +1,94 @@
+/* src/pages/Login.css */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0fdf4, #d1fae5);
+  padding: 2rem;
+}
+
+.login-container {
+  background: #ffffff;
+  padding: 3rem 2.5rem;
+  border-radius: 2rem;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-container h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #064e3b;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.login-container p.sub {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.login-container .form-group {
+  margin-bottom: 1.25rem;
+}
+
+.login-container label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+}
+
+.login-container .btn-primary {
+  width: 100%;
+  padding: 0.9rem;
+  background: #10b981;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+
+.login-container .btn-primary:hover {
+  background: #059669;
+}
+
+.login-container .signup-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #4b5563;
+}
+
+.login-container .signup-link a {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 0.5rem 0;
+}
