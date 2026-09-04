@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// API Routes
+// API Routes (auth + driver/pickup + donations)
 app.use('/api', apiRouter);
 
 // Catch 404 and forward to error handler

@@ -5,6 +5,8 @@ const authRoutes = require('./auth.routes');
 const donorRoutes = require('./donorRoutes');
 const receiverRoutes = require('./receiverRoutes');
 const donationRoutes = require('./donationRoutes');
+const pickupRoutes = require('./pickup.routes');
+const driverRoutes = require('./driver.routes');
 
 // Healthcheck Route
 router.get('/health', (req, res) => {
@@ -20,5 +22,9 @@ router.use('/auth', authRoutes);
 router.use('/donors', donorRoutes);
 router.use('/receivers', receiverRoutes);
 router.use('/donations', donationRoutes);
+
+// Driver management Routes
+router.use('/pickups', pickupRoutes);
+router.use('/drivers', driverRoutes);
 
 module.exports = router;

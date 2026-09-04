@@ -1,0 +1,37 @@
+.fl-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--fl-green-700);
+}
+
+.fl-logo__mark {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+}
+
+.fl-logo__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.fl-logo__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.fl-logo__tagline {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--fl-text-muted);
+  margin-top: 0.15rem;
+}
+
+.fl-logo--compact .fl-logo__mark {
+  width: 36px;
+  height: 36px;
+}
