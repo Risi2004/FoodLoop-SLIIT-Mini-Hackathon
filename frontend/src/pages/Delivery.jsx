@@ -19,6 +19,9 @@ function mapPickup(pickup) {
     distanceKm: pickup.distanceKm,
     locationLabel: pickup.locationLabel,
     expiresInMinutes: minutesUntil(pickup.expiresAt),
+    pickupLocation: pickup.pickupLocation,
+    dropoffLocation: pickup.dropoffLocation,
+    driverLocation: pickup.driverLocation,
   }
 }
 
@@ -118,6 +121,7 @@ export default function Delivery() {
         </aside>
 
         <DeliveryMap
+          pickup={selected}
           currentLocation={
             selected
               ? `${selected.locationLabel || 'Gampaha'}, Sri Lanka`

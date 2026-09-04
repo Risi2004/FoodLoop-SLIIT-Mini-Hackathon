@@ -1,7 +1,34 @@
 import FoodLoopMap, { DEMO_POINTS } from '../map/FoodLoopMap'
 import './DeliveryMap.css'
 
-export default function DeliveryMap({ currentLocation = 'Gampaha, Sri Lanka' }) {
+function buildRoutePoints(pickup) {
+  if (!pickup) {
+    return [DEMO_POINTS.pickup, DEMO_POINTS.driver, DEMO_POINTS.dropoff]
+  }
+
+  const points = []
+  if (pickup.pickupLocation) {
+    points.push({ ...pickup.pickupLocation, label: 'Pickup' })
+  }
+  if (pickup.driverLocation) {
+    points.push({ ...pickup.driverLocation, label: 'Driver' })
+  }
+  if (pickup.dropoffLocation) {
+    points.push({ ...pickup.dropoffLocation, label: 'Drop-off' })
+  }
+
+  return points.length
+    ? points
+    : [DEMO_POINTS.pickup, DEMO_POINTS.driver, DEMO_POINTS.dropoff]
+}
+
+export default function DeliveryMap({
+  currentLocation = 'Gampaha, Sri Lanka',
+  pickup = null,
+}) {
+  const points = buildRoutePoints(pickup)
+  const center = pickup?.driverLocation || pickup?.pickupLocation || DEMO_POINTS.driver
+
   return (
     <section className="delivery-map" aria-label="Delivery map">
       <div className="delivery-map__location">
@@ -17,10 +44,7 @@ export default function DeliveryMap({ currentLocation = 'Gampaha, Sri Lanka' }) 
       </div>
 
       <div className="delivery-map__canvas">
-        <FoodLoopMap
-          center={DEMO_POINTS.driver}
-          points={[DEMO_POINTS.pickup, DEMO_POINTS.driver, DEMO_POINTS.dropoff]}
-        />
+        <FoodLoopMap center={center} points={points} showRoute />
       </div>
     </section>
   )

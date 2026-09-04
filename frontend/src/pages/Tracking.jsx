@@ -78,7 +78,7 @@ export default function Tracking() {
 
         {!loading && pickup && (
           <div className="tracking-shell__body">
-            <TrackingMap />
+            <TrackingMap pickup={pickup} />
 
             <aside className="tracking-panel">
               <article className="tracking-card">

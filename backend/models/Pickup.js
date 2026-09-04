@@ -20,6 +20,14 @@ const journeyStepSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const geoPointSchema = new mongoose.Schema(
+  {
+    lat: { type: Number, required: true },
+    lng: { type: Number, required: true },
+  },
+  { _id: false }
+);
+
 const pickupSchema = new mongoose.Schema(
   {
     trackingId: { type: String, required: true, unique: true, trim: true },
@@ -29,6 +37,9 @@ const pickupSchema = new mongoose.Schema(
     distanceKm: { type: Number, default: 0, min: 0 },
     locationLabel: { type: String, default: "", trim: true },
     recipientLabel: { type: String, default: "", trim: true },
+    pickupLocation: { type: geoPointSchema, default: null },
+    dropoffLocation: { type: geoPointSchema, default: null },
+    driverLocation: { type: geoPointSchema, default: null },
     expiresAt: { type: Date },
     status: {
       type: String,
