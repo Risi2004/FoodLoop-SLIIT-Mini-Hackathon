@@ -11,8 +11,10 @@ backend/node_modules/
 *.env
 frontend/.env
 frontend/.env.*
+!frontend/.env.example
 backend/.env
 backend/.env.*
+!backend/.env.example
 
 # Build and Production Outputs
 dist/
