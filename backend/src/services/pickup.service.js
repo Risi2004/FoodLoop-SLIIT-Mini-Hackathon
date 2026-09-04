@@ -1,6 +1,9 @@
 const Pickup = require("../models/Pickup");
 const Driver = require("../models/Driver");
+const Donation = require("../models/Donation");
+const Donor = require("../models/Donor");
 const ApiError = require("../utils/ApiError");
+const { ensurePickupForDonation } = require("./donationBridge.service");
 
 function buildConfirmJourney(driverName) {
   const now = new Date();
@@ -30,7 +33,32 @@ function buildConfirmJourney(driverName) {
   ];
 }
 
+/** Mirror any active donations that never got a Pickup (older posts). */
+async function syncActiveDonationsToPickups() {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const donations = await Donation.find({
+    status: "active",
+    remainingQuantity: { $gt: 0 },
+    $or: [{ expiryDate: { $gte: startOfToday } }, { expiryDate: null }],
+  }).limit(50);
+
+  for (const donation of donations) {
+    const exists = await Pickup.exists({ donationId: donation._id });
+    if (exists) continue;
+    const donor = await Donor.findById(donation.donorId);
+    await ensurePickupForDonation({ donation, donor });
+  }
+}
+
 async function getAvailablePickups() {
+  try {
+    await syncActiveDonationsToPickups();
+  } catch (err) {
+    console.error("Donation→pickup sync skipped:", err.message);
+  }
+
   const pickups = await Pickup.find({ status: "available" })
     .sort({ expiresAt: 1, createdAt: -1 })
     .lean();

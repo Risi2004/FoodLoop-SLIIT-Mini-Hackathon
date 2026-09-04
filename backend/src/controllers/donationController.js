@@ -5,6 +5,11 @@ const {
   ensureDonorForUser,
   ensureReceiverForUser,
 } = require('../services/roleProfile.service');
+const {
+  normalizeExpiryDate,
+  ensurePickupForDonation,
+  attachClaimToPickup,
+} = require('../services/donationBridge.service');
 
 async function loadAuthUser(req) {
   if (req.user?._id && req.user.email) return req.user;
@@ -12,13 +17,14 @@ async function loadAuthUser(req) {
   return User.findById(id);
 }
 
-// Create a new donation (donor only)
+// Create a new donation (donor only) + mirror to driver Pickup board
 exports.createDonation = async (req, res) => {
   const { foodName, totalQuantity, description, pickupAddress, expiryDate, unit } = req.body;
 
   try {
     const user = await loadAuthUser(req);
     const donor = await ensureDonorForUser(user);
+    const normalizedExpiry = normalizeExpiryDate(expiryDate);
 
     const donation = new Donation({
       donorId: donor._id,
@@ -27,11 +33,18 @@ exports.createDonation = async (req, res) => {
       remainingQuantity: totalQuantity,
       description,
       pickupAddress,
-      expiryDate,
+      expiryDate: normalizedExpiry,
       unit
     });
     await donation.save();
-    res.status(201).json(donation);
+
+    const pickup = await ensurePickupForDonation({ donation, donor });
+
+    res.status(201).json({
+      ...donation.toObject(),
+      pickupId: pickup?._id || null,
+      trackingId: pickup?.trackingId || null,
+    });
   } catch (err) {
     console.error(err);
     const status = err.statusCode || 500;
@@ -42,11 +55,19 @@ exports.createDonation = async (req, res) => {
 // Get all active donations (receiver only)
 exports.getActiveDonations = async (req, res) => {
   try {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
     const donations = await Donation.find({
       status: 'active',
       remainingQuantity: { $gt: 0 },
-      expiryDate: { $gt: new Date() }
-    }).populate('donorId', 'businessName kitchenAddress contactPhone');
+      $or: [
+        { expiryDate: { $gte: startOfToday } },
+        { expiryDate: null },
+      ],
+    })
+      .populate('donorId', 'businessName kitchenAddress contactPhone')
+      .sort({ createdAt: -1 });
     res.json(donations);
   } catch (err) {
     console.error(err);
@@ -54,7 +75,7 @@ exports.getActiveDonations = async (req, res) => {
   }
 };
 
-// Claim a donation (receiver only)
+// Claim a donation (receiver only) + attach receiver onto linked Pickup
 exports.claimDonation = async (req, res) => {
   const { quantity } = req.body;
   const donationId = req.params.id;
@@ -95,9 +116,16 @@ exports.claimDonation = async (req, res) => {
       await Donation.findByIdAndUpdate(donationId, { status: 'fulfilled' });
     }
 
+    const pickup = await attachClaimToPickup({
+      donation: updatedDonation,
+      receiver,
+    });
+
     res.json({
       donation: updatedDonation,
       claim,
+      pickupId: pickup?._id || null,
+      trackingId: pickup?.trackingId || null,
       message: `Claimed ${quantity} item(s). Remaining: ${updatedDonation.remainingQuantity}`
     });
   } catch (err) {

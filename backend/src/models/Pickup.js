@@ -53,6 +53,12 @@ const pickupSchema = new mongoose.Schema(
       default: null,
       index: true,
     },
+    donationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Donation",
+      default: null,
+      index: true,
+    },
     etaMinutes: { type: Number, default: 15 },
     journey: { type: [journeyStepSchema], default: [] },
   },
