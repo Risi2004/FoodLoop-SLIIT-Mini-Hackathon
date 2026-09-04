@@ -23,6 +23,24 @@ export function confirmPickup(pickupId) {
   })
 }
 
+export function updateDriverLocation(pickupId, { lat, lng }) {
+  const driverId = requireDriverId()
+
+  return apiRequest(`/api/pickups/${pickupId}/location`, {
+    method: 'PATCH',
+    body: JSON.stringify({ driverId, lat, lng }),
+  })
+}
+
+export function completePickup(pickupId) {
+  const driverId = requireDriverId()
+
+  return apiRequest(`/api/pickups/${pickupId}/complete`, {
+    method: 'POST',
+    body: JSON.stringify({ driverId }),
+  })
+}
+
 export function getMyPickups() {
   const driverId = requireDriverId()
   return apiRequest(`/api/pickups/my/${driverId}`)

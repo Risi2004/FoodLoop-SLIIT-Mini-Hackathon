@@ -8,6 +8,11 @@ router.get("/available", controller.getAvailable);
 router.get("/my/:driverId", controller.getMyPickups);
 router.get("/tracking/:trackingId", controller.getTracking);
 router.post("/:id/confirm", validation.confirmPickup, controller.confirmPickup);
+router.patch(
+  "/:id/location",
+  validation.updateLocation,
+  controller.updateLocation
+);
 router.post("/:id/complete", validation.completePickup, controller.completePickup);
 
 module.exports = router;

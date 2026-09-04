@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { driverNotifications } from '../data/mockNotifications'
+import authService from '../services/auth.service'
 import './Notifications.css'
 
 export default function Notifications() {
   const navigate = useNavigate()
   const [items, setItems] = useState(driverNotifications)
+  const role = (authService.getRole() || '').toUpperCase()
 
   const groups = useMemo(() => {
     const today = items.filter((item) => item.group === 'today')
@@ -20,9 +22,14 @@ export default function Notifications() {
     setItems((prev) => prev.filter((item) => item.id !== id))
   }
 
-  function handleClaim() {
-    navigate('/delivery')
+  function handlePrimaryAction() {
+    if (role === 'DONOR') navigate('/donor/new')
+    else if (role === 'RECEIVER') navigate('/receiver/find')
+    else navigate('/delivery')
   }
+
+  const primaryLabel =
+    role === 'DONOR' ? 'Post Donation' : role === 'RECEIVER' ? 'Find Food' : 'Claim Item'
 
   return (
     <div className="notifications-page">
@@ -43,8 +50,8 @@ export default function Notifications() {
                       </div>
                       <p>{item.body}</p>
                       <div className="notification-card__actions">
-                        <button type="button" onClick={handleClaim}>
-                          Claim Item
+                        <button type="button" onClick={handlePrimaryAction}>
+                          {primaryLabel}
                         </button>
                         <button
                           type="button"

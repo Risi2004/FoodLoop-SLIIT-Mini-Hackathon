@@ -1,0 +1,71 @@
+.my-claims {
+  padding-bottom: 2rem;
+  background: var(--fl-bg);
+  min-height: 100svh;
+}
+
+.my-claims__head {
+  text-align: left;
+}
+
+.my-claims__head h2 {
+  text-align: left;
+}
+
+.my-claims__head p {
+  text-align: left;
+}
+
+.my-claims__empty {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+}
+
+.my-claims__list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.my-claim-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  background: var(--fl-surface);
+  border: 1px solid var(--fl-border);
+  border-radius: var(--fl-radius);
+  padding: 1.15rem 1.25rem;
+  box-shadow: var(--fl-shadow);
+}
+
+.my-claim-card h3 {
+  color: var(--fl-green-800);
+  margin-bottom: 0.35rem;
+}
+
+.my-claim-card p {
+  color: var(--fl-text-muted);
+  font-size: 0.92rem;
+}
+
+.my-claim-card__meta {
+  margin-top: 0.35rem;
+  font-size: 0.85rem !important;
+}
+
+.my-claim-card__badge {
+  flex-shrink: 0;
+  background: var(--fl-lime-soft);
+  color: var(--fl-green-700);
+  border-radius: var(--fl-radius-pill);
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .my-claim-card {
+    flex-direction: column;
+  }
+}

@@ -30,6 +30,20 @@
   align-items: center;
   gap: 12px;
   user-select: none;
+  padding: 0.35rem 1rem 0.35rem 0.6rem;
+  border-radius: var(--fl-radius-pill);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 20px rgba(10, 51, 40, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.navbar-brand .fl-logo {
+  color: var(--fl-green-800);
+}
+
+.navbar-brand .fl-logo__tagline {
+  color: var(--fl-text-muted);
 }
 
 .brand-icon-wrapper {

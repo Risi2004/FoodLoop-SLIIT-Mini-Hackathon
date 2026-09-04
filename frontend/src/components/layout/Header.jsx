@@ -1,25 +1,41 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Logo from '../Logo'
+import authService from '../../services/auth.service'
+import { getRoleConfig } from '../../config/navConfig'
 import './Header.css'
 
-const NAV_LINKS = [
-  { to: '/driver', label: 'Home', end: true },
-  { to: '/about', label: 'About us' },
-  { to: '/contact', label: 'Contact us' },
-  { to: '/delivery', label: 'Delivery' },
-  { to: '/my-pickups', label: 'MyPickups' },
-]
+export default function Header({ role = 'DRIVER' }) {
+  const navigate = useNavigate()
+  const config = getRoleConfig(role)
+  const user = authService.getUser()
+  const displayName =
+    user?.driverName ||
+    user?.businessName ||
+    user?.receiverName ||
+    user?.name ||
+    user?.email ||
+    'User_Name'
 
-export default function Header() {
+  async function handleLogout() {
+    await authService.logout()
+    try {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+    } catch {
+      /* ignore */
+    }
+    navigate('/login', { replace: true })
+  }
+
   return (
     <header className="fl-header">
       <div className="fl-header__inner">
-        <NavLink to="/driver" className="fl-header__brand" aria-label="FoodLoop driver home">
+        <NavLink to={config.home} className="fl-header__brand" aria-label="FoodLoop home">
           <Logo />
         </NavLink>
 
         <nav className="fl-header__nav" aria-label="Main">
-          {NAV_LINKS.map(({ to, label, end }) => (
+          {config.nav.map(({ to, label, end }) => (
             <NavLink
               key={to}
               to={to}
@@ -35,7 +51,7 @@ export default function Header() {
 
         <div className="fl-header__actions">
           <NavLink
-            to="/notifications"
+            to={config.notifications}
             className="fl-header__icon-btn"
             aria-label="Notifications"
           >
@@ -47,8 +63,8 @@ export default function Header() {
             </svg>
           </NavLink>
 
-          <NavLink to="/profile" className="fl-header__profile">
-            <span>User_Name</span>
+          <NavLink to={config.profile} className="fl-header__profile">
+            <span>{displayName}</span>
             <span className="fl-header__avatar" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="18" height="18">
                 <path
@@ -58,6 +74,15 @@ export default function Header() {
               </svg>
             </span>
           </NavLink>
+
+          <button
+            type="button"
+            className="fl-header__logout"
+            onClick={handleLogout}
+            aria-label="Log out"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </header>

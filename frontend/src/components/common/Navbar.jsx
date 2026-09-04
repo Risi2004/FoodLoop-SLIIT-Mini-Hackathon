@@ -1,44 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ArrowRight, Leaf, Menu, X } from 'lucide-react';
-import './Navbar.css';
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { ArrowRight, Menu, X } from 'lucide-react'
+import Logo from '../Logo'
+import './Navbar.css'
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const location = useLocation()
+  const isHome = location.pathname === '/'
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 30) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const isHome = location.pathname === '/';
+    const handleScroll = () => setIsScrolled(window.scrollY > 30)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
     <header className={`navbar-header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container container">
-        {/* Brand Logo */}
-        <Link to="/" className="navbar-brand">
-          <div className="brand-icon-wrapper">
-            <div className="brand-icon-ring">
-              <Leaf className="brand-leaf-icon" size={20} />
-            </div>
-          </div>
-          <div className="brand-text-block">
-            <span className="brand-title">Food<span className="highlight">Loop</span></span>
-            <span className="brand-tagline">Zero Waste, Infinite Impact</span>
-          </div>
+        <Link to="/" className="navbar-brand" aria-label="FoodLoop home">
+          <Logo />
         </Link>
 
-        {/* Desktop Nav Links */}
         <nav className="navbar-links">
           {isHome ? (
             <>
@@ -50,14 +34,13 @@ export default function Navbar() {
           ) : (
             <>
               <Link to="/" className="nav-link">Home</Link>
-              <Link to="/#about" className="nav-link">About us</Link>
+              <Link to="/about" className="nav-link">About us</Link>
               <Link to="/#how-it-works" className="nav-link">How It Works</Link>
-              <Link to="/#contact" className="nav-link">Contact us</Link>
+              <Link to="/contact" className="nav-link">Contact us</Link>
             </>
           )}
         </nav>
 
-        {/* Right CTA */}
         <div className="navbar-actions">
           <Link to="/login" className="login-btn">
             <span>Login</span>
@@ -66,24 +49,23 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Mobile Menu Toggle */}
-          <button 
+          <button
             className="mobile-menu-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
+            type="button"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="mobile-drawer">
           <Link to="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-          <a href="#about" onClick={() => setMobileMenuOpen(false)}>About us</a>
+          <Link to="/about" onClick={() => setMobileMenuOpen(false)}>About us</Link>
           <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact us</a>
+          <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact us</Link>
           <Link to="/login" className="login-btn mobile" onClick={() => setMobileMenuOpen(false)}>
             <span>Login</span>
             <ArrowRight size={16} />
@@ -91,5 +73,5 @@ export default function Navbar() {
         </div>
       )}
     </header>
-  );
+  )
 }

@@ -289,8 +289,20 @@ export default function SignupPage() {
                 <p>
                   Welcome to FoodLoop. Your <strong>{currentRole}</strong> registration has been submitted and verified.
                 </p>
-                <button className="goto-login-btn" onClick={() => navigate('/login')}>
-                  Proceed to Login
+                <button
+                  className="goto-login-btn"
+                  onClick={() =>
+                    navigate(
+                      authService.isAuthenticated()
+                        ? authService.getDashboardPath(currentRole)
+                        : '/login',
+                      { replace: true }
+                    )
+                  }
+                >
+                  {authService.isAuthenticated() && currentRole === 'driver'
+                    ? 'Go to Driver Dashboard'
+                    : 'Proceed to Login'}
                 </button>
               </div>
             ) : (

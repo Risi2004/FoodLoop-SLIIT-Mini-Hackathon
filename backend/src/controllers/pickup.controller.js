@@ -24,6 +24,15 @@ const confirmPickup = asyncHandler(async (req, res) => {
   res.json(pickup);
 });
 
+const updateLocation = asyncHandler(async (req, res) => {
+  const pickup = await pickupService.updateDriverLocation(
+    req.params.id,
+    req.body.driverId,
+    { lat: req.body.lat, lng: req.body.lng }
+  );
+  res.json(pickup);
+});
+
 const completePickup = asyncHandler(async (req, res) => {
   const pickup = await pickupService.completePickup(
     req.params.id,
@@ -37,5 +46,6 @@ module.exports = {
   getMyPickups,
   getTracking,
   confirmPickup,
+  updateLocation,
   completePickup,
 };

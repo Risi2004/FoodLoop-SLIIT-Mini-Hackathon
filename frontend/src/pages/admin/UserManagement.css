@@ -1,0 +1,73 @@
+.user-management {
+  padding-bottom: 2rem;
+  background: var(--fl-bg);
+  min-height: 100svh;
+}
+
+.user-management__head {
+  text-align: left;
+}
+
+.user-management__head h2,
+.user-management__head p {
+  text-align: left;
+}
+
+.user-management__table-wrap {
+  padding: 0;
+  overflow: auto;
+}
+
+.user-management__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.user-management__table th,
+.user-management__table td {
+  text-align: left;
+  padding: 0.95rem 1.1rem;
+  border-bottom: 1px solid var(--fl-border);
+}
+
+.user-management__table th {
+  color: var(--fl-green-800);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  background: var(--fl-surface-muted);
+}
+
+.user-management__table td {
+  color: var(--fl-text);
+  font-size: 0.92rem;
+}
+
+.user-management__role,
+.user-management__status {
+  display: inline-flex;
+  border-radius: var(--fl-radius-pill);
+  padding: 0.2rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.user-management__role {
+  background: var(--fl-lime-soft);
+  color: var(--fl-green-700);
+}
+
+.user-management__status.is-active {
+  background: rgba(45, 143, 95, 0.15);
+  color: var(--fl-green-600);
+}
+
+.user-management__status.is-pending {
+  background: var(--fl-surface-muted);
+  color: var(--fl-text-muted);
+}
+
+.user-management__status.is-suspended {
+  background: rgba(224, 69, 69, 0.12);
+  color: var(--fl-danger);
+}

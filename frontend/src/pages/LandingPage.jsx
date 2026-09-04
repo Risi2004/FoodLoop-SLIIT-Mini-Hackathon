@@ -5,17 +5,14 @@ import StatsCounter from '../components/landing/StatsCounter';
 import VisionMission from '../components/landing/VisionMission';
 import TransparencyLoop from '../components/landing/TransparencyLoop';
 import ContactSection from '../components/landing/ContactSection';
-import Footer from '../components/common/Footer';
+import Footer from '../components/layout/Footer';
 import ChatBotWidget from '../components/common/ChatBotWidget';
 import './LandingPage.css';
 
 export default function LandingPage() {
   return (
     <div className="landing-page">
-      {/* Navigation Header */}
       <Navbar />
-
-      {/* Main Sections */}
       <main className="landing-main">
         <HeroSection />
         <StatsCounter />
@@ -23,11 +20,7 @@ export default function LandingPage() {
         <TransparencyLoop />
         <ContactSection />
       </main>
-
-      {/* Footer */}
       <Footer />
-
-      {/* Floating Interactive AI Assistant */}
       <ChatBotWidget />
     </div>
   );

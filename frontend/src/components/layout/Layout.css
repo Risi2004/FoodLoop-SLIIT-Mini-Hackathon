@@ -7,3 +7,37 @@
 .fl-layout__main {
   flex: 1;
 }
+
+.fl-layout--public {
+  background: var(--fl-bg);
+}
+
+.fl-layout--public .fl-layout__main {
+  padding-top: 5.5rem;
+}
+
+.fl-layout--public .about-hero__copy h1,
+.fl-layout--public .contact-page__intro h1 {
+  color: var(--fl-green-900);
+}
+
+.fl-layout--public .about-hero__copy > p:not(.about-kicker),
+.fl-layout--public .contact-page__intro p {
+  color: var(--fl-text-muted);
+}
+
+.fl-layout--public .about-kicker {
+  background: rgba(26, 107, 71, 0.12);
+  color: var(--fl-green-700);
+}
+
+.fl-layout--public .about-hero__stat {
+  background: var(--fl-surface);
+  border: 1px solid var(--fl-border);
+  color: var(--fl-text);
+}
+
+.fl-layout--public .about-hero__ghost {
+  color: var(--fl-green-800);
+  border-color: var(--fl-green-800);
+}

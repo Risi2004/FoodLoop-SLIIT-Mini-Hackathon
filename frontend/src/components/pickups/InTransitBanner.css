@@ -86,3 +86,20 @@
   font-weight: 700;
   color: var(--fl-danger);
 }
+
+.in-transit__cta {
+  display: inline-flex;
+  margin-top: 0.85rem;
+  width: 100%;
+  justify-content: center;
+  border-radius: var(--fl-radius-pill);
+  background: var(--fl-green-800);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.65rem 0.85rem;
+}
+
+.in-transit__cta:hover {
+  background: var(--fl-green-900);
+}

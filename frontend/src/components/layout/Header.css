@@ -99,6 +99,23 @@
   font-weight: 700;
 }
 
+.fl-header__logout {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--fl-radius-pill);
+  background: rgba(10, 51, 40, 0.35);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.5rem 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.fl-header__logout:hover {
+  background: rgba(224, 69, 69, 0.85);
+}
+
 .fl-header__avatar {
   width: 28px;
   height: 28px;

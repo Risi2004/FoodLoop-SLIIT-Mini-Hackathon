@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Leaf, Eye, EyeOff, HeartHandshake, ArrowLeft, AlertCircle } from 'lucide-react';
 import authService from '../services/auth.service';
 import loginHeroImg from '../assets/images/login.png';
@@ -7,6 +7,7 @@ import './LoginPage.css';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     identifier: '',
     password: '',
@@ -22,8 +23,10 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await authService.login(formData.identifier, formData.password);
-      navigate('/');
+      const result = await authService.login(formData.identifier, formData.password);
+      const role = result?.data?.user?.role || authService.getRole();
+      const from = location.state?.from?.pathname;
+      navigate(from || authService.getDashboardPath(role), { replace: true });
     } catch (err) {
       setErrorMessage(err.message || 'Login failed. Please check your credentials.');
     } finally {

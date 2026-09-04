@@ -1,4 +1,20 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+// Accepts either VITE_API_BASE_URL (full, incl. /api) or VITE_API_URL (server root),
+// and always normalises to a single trailing /api segment.
+function resolveApiBase() {
+  const explicit = import.meta.env.VITE_API_BASE_URL;
+  const root = import.meta.env.VITE_API_URL;
+
+  let base = explicit || (root ? `${root}/api` : 'http://localhost:5000/api');
+  base = base.replace(/\/+$/, '');
+
+  if (!base.endsWith('/api')) {
+    base = `${base}/api`;
+  }
+
+  return base;
+}
+
+const API_BASE_URL = resolveApiBase();
 
 class AuthService {
   /**
@@ -126,6 +142,33 @@ class AuthService {
     } catch {
       return true;
     }
+  }
+
+  /**
+   * Landing route for a role once authenticated
+   */
+  getDashboardPath(role) {
+    switch ((role || '').toUpperCase()) {
+      case 'DRIVER':
+        return '/driver';
+      case 'DONOR':
+        return '/donor';
+      case 'RECEIVER':
+        return '/receiver';
+      default:
+        return '/';
+    }
+  }
+
+  /**
+   * Role of the currently stored user, if any
+   */
+  getRole() {
+    return this.getUser()?.role || null;
+  }
+
+  isAuthenticated() {
+    return Boolean(this.getToken());
   }
 
   /**

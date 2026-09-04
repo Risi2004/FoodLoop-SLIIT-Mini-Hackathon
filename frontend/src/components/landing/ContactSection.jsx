@@ -6,7 +6,7 @@ export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    role: 'Donor / Restaurant',
+    role: 'General Inquiry',
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -17,7 +17,7 @@ export default function ContactSection() {
     setIsSubmitted(true);
     setTimeout(() => {
       setIsSubmitted(false);
-      setFormData({ name: '', email: '', role: 'Donor / Restaurant', message: '' });
+      setFormData({ name: '', email: '', role: 'General Inquiry', message: '' });
     }, 4000);
   };
 
@@ -103,16 +103,16 @@ export default function ContactSection() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="role">Category / Role</label>
+                    <label htmlFor="role">Subject</label>
                     <select 
                       id="role"
                       value={formData.role}
                       onChange={(e) => setFormData({...formData, role: e.target.value})}
                     >
+                      <option value="General Inquiry">General Inquiry</option>
                       <option value="Donor / Restaurant">Donor / Restaurant</option>
                       <option value="Volunteer">Volunteer</option>
                       <option value="NGO Representative">NGO Representative</option>
-                      <option value="General Inquiry">General Inquiry</option>
                     </select>
                   </div>
 

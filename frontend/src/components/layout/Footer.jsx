@@ -1,21 +1,18 @@
 import { Link } from 'react-router-dom'
 import Logo from '../Logo'
+import { PUBLIC_FOOTER_LINKS, getRoleConfig } from '../../config/navConfig'
 import './Footer.css'
-
-const QUICK_LINKS = [
-  { to: '/driver', label: 'Home' },
-  { to: '/about', label: 'About Us' },
-  { to: '/contact', label: 'Contact Us' },
-  { to: '/delivery', label: 'Delivery' },
-  { to: '/my-pickups', label: 'MyPickups' },
-]
 
 const LEGAL_LINKS = [
   { to: '/privacy', label: 'Privacy Policy' },
   { to: '/terms', label: 'Terms & Conditions' },
 ]
 
-export default function Footer() {
+export default function Footer({ role = null }) {
+  const quickLinks = role
+    ? getRoleConfig(role).footerLinks
+    : PUBLIC_FOOTER_LINKS
+
   return (
     <footer className="fl-footer">
       <div className="fl-footer__inner">
@@ -50,8 +47,8 @@ export default function Footer() {
         <div className="fl-footer__col">
           <h3>Quick Links</h3>
           <ul>
-            {QUICK_LINKS.map(({ to, label }) => (
-              <li key={to}>
+            {quickLinks.map(({ to, label }) => (
+              <li key={`${to}-${label}`}>
                 <Link to={to}>{label}</Link>
               </li>
             ))}

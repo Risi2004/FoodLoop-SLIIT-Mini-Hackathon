@@ -3,14 +3,14 @@ import Header from './Header'
 import Footer from './Footer'
 import './Layout.css'
 
-export default function Layout() {
+export default function Layout({ role = 'DRIVER' }) {
   return (
     <div className="fl-layout">
-      <Header />
+      <Header role={role} />
       <main className="fl-layout__main">
         <Outlet />
       </main>
-      <Footer />
+      <Footer role={role} />
     </div>
   )
 }
