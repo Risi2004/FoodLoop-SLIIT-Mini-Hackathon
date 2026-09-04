@@ -40,7 +40,7 @@ export default function MyDonations() {
   return (
     <div className="my-donations">
       <div className="page my-donations__inner">
-        <header className="my-donations__intro">
+        <header className="my-donations__intro fl-hero-on-dark">
           <div>
             <h1>My Donations</h1>
             <p>Track surplus you have posted and what is still available.</p>

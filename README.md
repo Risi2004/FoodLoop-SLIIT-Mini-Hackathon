@@ -60,7 +60,6 @@ node scripts/seedDemoAccounts.js  # demo donor + receiver + donations
 cd frontend
 # Create .env with:
 #   VITE_API_URL=http://localhost:5000
-#   VITE_DRIVER_ID=<seeded_driver_mongo_id>
 npm install
 npm run dev
 ```
@@ -90,7 +89,7 @@ After login: Driver → `/driver` · Donor → `/donor` · Receiver → `/receiv
 
 - Never commit `.env` files  
 - Atlas URI path segment is the DB name (e.g. `/foodloop`) — Mongo creates it on first write  
-- Keep `VITE_DRIVER_ID` in sync with the seeded Driver document for pickup APIs  
+- Pickup/driver APIs use the **logged-in driver** (`GET /api/drivers/me`) — no `VITE_DRIVER_ID` needed  
 
 ## License
 

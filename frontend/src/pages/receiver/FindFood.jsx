@@ -1,11 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getActiveDonations, claimDonation } from '../../api/donationApi'
 import ClaimModal from '../../components/receiver/ClaimModal'
-import FoodLoopMap from '../../components/map/FoodLoopMap'
+import findFoodMapImg from '../../assets/images/find-food-map.png'
 import './FindFood.css'
 
 const CLAIMS_KEY = 'foodloop_claims'
 const FILTERS = ['All', 'Nearby', 'Expiring soon', 'Prepared meals', 'Produce']
+
+const AREA_CENTERS = [
+  { label: 'Gampaha', lat: 7.084, lng: 80.01 },
+  { label: 'Colombo', lat: 6.927, lng: 79.861 },
+  { label: 'Nugegoda', lat: 6.872, lng: 79.889 },
+  { label: 'Negombo', lat: 7.209, lng: 79.838 },
+  { label: 'Kadawatha', lat: 7.001, lng: 79.95 },
+]
 
 function readClaims() {
   try {
@@ -22,13 +30,41 @@ function appendClaim(claim) {
   localStorage.setItem(CLAIMS_KEY, JSON.stringify(next))
 }
 
-function donationCoords(donation) {
+function hashString(value) {
+  let hash = 0
+  const text = String(value || '')
+  for (let i = 0; i < text.length; i += 1) {
+    hash = (hash << 5) - hash + text.charCodeAt(i)
+    hash |= 0
+  }
+  return Math.abs(hash)
+}
+
+function donationCoords(donation, index = 0) {
   const lat = donation?.location?.lat ?? donation?.lat ?? donation?.coordinates?.lat
   const lng = donation?.location?.lng ?? donation?.lng ?? donation?.coordinates?.lng
   if (typeof lat === 'number' && typeof lng === 'number') {
-    return { lat, lng, label: donation.foodName || 'Surplus' }
+    return {
+      lat,
+      lng,
+      label: donation.foodName || 'Surplus',
+    }
   }
-  return null
+
+  const address = (donation.pickupAddress || '').toLowerCase()
+  const area =
+    AREA_CENTERS.find((item) => address.includes(item.label.toLowerCase())) ||
+    AREA_CENTERS[index % AREA_CENTERS.length]
+
+  const seed = hashString(donation._id || donation.foodName || index)
+  const latJitter = ((seed % 100) - 50) * 0.00035
+  const lngJitter = (((seed >> 3) % 100) - 50) * 0.00035
+
+  return {
+    lat: area.lat + latJitter,
+    lng: area.lng + lngJitter,
+    label: donation.foodName || 'Surplus',
+  }
 }
 
 export default function FindFood() {
@@ -82,10 +118,39 @@ export default function FindFood() {
     })
   }, [donations, query, filter])
 
-  const mapPoints = useMemo(
-    () => filtered.map(donationCoords).filter(Boolean),
+  const [activePinId, setActivePinId] = useState(null)
+
+  const mapPins = useMemo(
+    () =>
+      filtered.slice(0, 6).map((donation, index) => ({
+        ...donationCoords(donation, index),
+        id: donation._id,
+        foodName: donation.foodName,
+        remainingQuantity: donation.remainingQuantity,
+        unit: donation.unit,
+        donorName: donation.donorId?.businessName || 'Community donor',
+        donation,
+      })),
     [filtered]
   )
+
+  function openClaim(donation) {
+    if (!donation?.remainingQuantity) return
+    setSelectedDonation({
+      id: donation._id,
+      max: donation.remainingQuantity,
+      name: donation.foodName,
+    })
+  }
+
+  function handlePinClick(pin) {
+    setActivePinId(pin.id)
+    const card = document.getElementById(`find-food-card-${pin.id}`)
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+    openClaim(pin.donation)
+  }
 
   async function handleClaim(donationId, quantity) {
     try {
@@ -158,7 +223,13 @@ export default function FindFood() {
 
           <div className="find-food__cards">
             {filtered.map((donation) => (
-              <article key={donation._id} className="find-food-card">
+              <article
+                key={donation._id}
+                id={`find-food-card-${donation._id}`}
+                className={`find-food-card${
+                  activePinId === donation._id ? ' is-active' : ''
+                }`}
+              >
                 <div className="find-food-card__top">
                   <h2>{donation.foodName}</h2>
                   <span>
@@ -182,13 +253,7 @@ export default function FindFood() {
                   type="button"
                   className="btn-lime"
                   disabled={!donation.remainingQuantity}
-                  onClick={() =>
-                    setSelectedDonation({
-                      id: donation._id,
-                      max: donation.remainingQuantity,
-                      name: donation.foodName,
-                    })
-                  }
+                  onClick={() => openClaim(donation)}
                 >
                   Claim now
                 </button>
@@ -198,18 +263,45 @@ export default function FindFood() {
         </section>
 
         <aside className="find-food__map fl-panel">
-          {mapPoints.length > 0 ? (
-            <FoodLoopMap points={mapPoints} showRoute={false} />
-          ) : (
-            <div className="find-food__map-placeholder">
-              <span>Map preview</span>
-              <h2>Locations appear when listings include coordinates</h2>
-              <p>
-                Listings without map pins still show in the list. Claim surplus and
-                arrange pickup using the address on each card.
-              </p>
+          <div className="find-food__map-location">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5Z"
+              />
+            </svg>
+            <span>
+              Current Location: <strong>Gampaha, Sri Lanka</strong>
+            </span>
+          </div>
+          <div className="find-food__map-canvas">
+            <img
+              src={findFoodMapImg}
+              alt="Map view of surplus pickup areas near Gampaha"
+              className="find-food__map-image"
+            />
+            <div className="find-food__map-pins">
+              {mapPins.map((pin, index) => (
+                <button
+                  key={pin.id}
+                  type="button"
+                  className={`find-food__pin is-${index + 1}${
+                    activePinId === pin.id ? ' is-active' : ''
+                  }`}
+                  aria-label={`Open claim for ${pin.foodName}`}
+                  title={`${pin.foodName} — ${pin.remainingQuantity} ${pin.unit || 'units'}`}
+                  onClick={() => handlePinClick(pin)}
+                >
+                  <span className="find-food__pin-tip">
+                    <strong>{pin.foodName}</strong>
+                    <em>
+                      {pin.remainingQuantity} {pin.unit || 'units'}
+                    </em>
+                  </span>
+                </button>
+              ))}
             </div>
-          )}
+          </div>
         </aside>
       </div>
 

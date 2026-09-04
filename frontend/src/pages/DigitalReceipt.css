@@ -3,8 +3,8 @@
   background: linear-gradient(
     180deg,
     var(--fl-green-900) 0%,
-    var(--fl-green-950) 16%,
-    var(--fl-bg) 16%
+    var(--fl-green-950) 200px,
+    var(--fl-bg) 200px
   );
   min-height: 100svh;
 }

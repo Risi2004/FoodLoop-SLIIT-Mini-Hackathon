@@ -4,6 +4,7 @@ const tokenService = require('./token.service');
 const ApiError = require('../utils/ApiError');
 const crypto = require('crypto');
 const { USER_ROLES } = require('../config/constants');
+const driverService = require('./driver.service');
 
 class AuthService {
   /**
@@ -77,6 +78,11 @@ class AuthService {
     // 4. Save user
     const createdUser = await User.create(newUserObj);
 
+    // 4b. Create logistics Driver profile for pickup flows
+    if (userData.role === USER_ROLES.DRIVER) {
+      await driverService.ensureDriverForUser(createdUser);
+    }
+
     // 5. Generate Auth Token
     const token = tokenService.generateToken(createdUser);
 
@@ -106,6 +112,11 @@ class AuthService {
     }
 
     const token = tokenService.generateToken(user);
+
+    // Ensure logistics profile exists for registered drivers
+    if (String(user.role).toUpperCase() === USER_ROLES.DRIVER) {
+      await driverService.ensureDriverForUser(user);
+    }
 
     // Remove password from returned object
     const userJson = user.toJSON();

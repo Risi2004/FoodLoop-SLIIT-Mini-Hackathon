@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getDriverId } from '../api/client'
-import { getDriver, updateDriver } from '../api/drivers'
+import { getMyDriver, updateMyDriver } from '../api/drivers'
 import './EditProfile.css'
 
 export default function EditProfile() {
@@ -22,9 +21,7 @@ export default function EditProfile() {
 
     async function load() {
       try {
-        const driverId = getDriverId()
-        if (!driverId) throw new Error('VITE_DRIVER_ID is missing in frontend/.env')
-        const driver = await getDriver(driverId)
+        const driver = await getMyDriver()
         if (!active) return
         setDriverName(driver.name)
         setJoinedLabel(
@@ -63,8 +60,7 @@ export default function EditProfile() {
     setSaving(true)
     setError('')
     try {
-      const driverId = getDriverId()
-      await updateDriver(driverId, form)
+      await updateMyDriver(form)
       navigate('/profile')
     } catch (err) {
       setError(err.message || 'Failed to save profile')
@@ -76,7 +72,7 @@ export default function EditProfile() {
   return (
     <div className="edit-profile-page">
       <div className="page edit-profile-page__inner">
-        <header className="edit-profile-page__intro">
+        <header className="edit-profile-page__intro fl-hero-on-dark">
           <h1>
             Edit <span>Profile</span>
           </h1>

@@ -80,7 +80,7 @@ export default function ReceiverProfileEdit() {
   return (
     <div className="receiver-profile-edit">
       <div className="page receiver-profile-edit__inner">
-        <header className="receiver-profile-edit__intro">
+        <header className="receiver-profile-edit__intro fl-hero-on-dark">
           <h1>
             Edit <span>Profile</span>
           </h1>

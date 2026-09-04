@@ -390,22 +390,22 @@ img {
   margin-bottom: 0.5rem;
 }
 
-/* App shell */
+/* App shell — light page canvas; pages own their dark heroes (avoids 18% band clipping) */
 .fl-layout {
   font-family: var(--font-sans);
   color: var(--fl-text);
-  background: linear-gradient(180deg, var(--fl-green-900) 0%, var(--fl-green-950) 18%, var(--fl-bg) 18%);
+  background: var(--fl-bg);
   line-height: 1.5;
   min-height: 100svh;
 }
 
+/* Font only — do not force dark text; heroes sit on the dark band */
 .fl-layout h1,
 .fl-layout h2,
 .fl-layout h3,
 .fl-layout h4 {
   font-family: var(--font-display);
   line-height: 1.15;
-  color: var(--fl-text);
 }
 
 .fl-layout button,
@@ -413,6 +413,21 @@ img {
 .fl-layout textarea,
 .fl-layout select {
   font: inherit;
+}
+
+/* Use on intros/heroes that sit in the dark green shell band */
+.fl-hero-on-dark h1,
+.fl-hero-on-dark h2 {
+  color: var(--fl-text-on-dark);
+}
+
+.fl-hero-on-dark p {
+  color: rgba(245, 250, 247, 0.82);
+}
+
+.fl-hero-on-dark .fl-hero-on-dark__accent,
+.fl-hero-on-dark h1 span {
+  color: var(--fl-lime);
 }
 
 .page {

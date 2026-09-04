@@ -72,7 +72,7 @@ export default function NewDonation() {
   return (
     <div className="new-donation">
       <div className="page new-donation__inner">
-        <header className="new-donation__intro">
+        <header className="new-donation__intro fl-hero-on-dark">
           <h1>
             New <span>donation</span>
           </h1>

@@ -94,7 +94,7 @@ export default function DigitalReceipt() {
   return (
     <div className="digital-receipt">
       <div className="page digital-receipt__inner">
-        <div className="digital-receipt__toolbar no-print">
+        <div className="digital-receipt__toolbar no-print fl-hero-on-dark">
           <div>
             <Link to="/my-pickups" className="digital-receipt__back">
               Back to My pickups
@@ -173,7 +173,7 @@ export default function DigitalReceipt() {
             <div className="digital-receipt__impact">
               <article>
                 <span>Distance Traveled</span>
-                <strong>{receipt.distanceKm} KM</strong>
+                <strong>{Number(receipt.distanceKm || 0).toFixed(1)} KM</strong>
               </article>
               <article>
                 <span>People Fed</span>

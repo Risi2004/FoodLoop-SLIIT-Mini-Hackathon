@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { clearDriverCache } from '../api/drivers';
 
 const AuthContext = createContext();
 
@@ -24,6 +25,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('foodloop_user', JSON.stringify(userData));
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(userData));
+    clearDriverCache();
     setUser(userData);
   };
 
@@ -32,6 +34,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('foodloop_user');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    clearDriverCache();
     setUser(null);
   };
 

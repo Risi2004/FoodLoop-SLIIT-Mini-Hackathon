@@ -6,24 +6,21 @@
 
 .find-food__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
   gap: 1.25rem;
-  align-items: stretch;
-  min-height: 70vh;
-}
-
-.find-food__list,
-.find-food__map {
-  min-height: 560px;
+  align-items: start;
 }
 
 .find-food__list {
+  max-height: calc(100svh - 7.5rem);
+  min-height: 0;
   padding: 1.35rem 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   background: var(--fl-surface);
   border: 1px solid var(--fl-border);
+  overflow: hidden;
 }
 
 .find-food__list-head h1 {
@@ -91,6 +88,8 @@
   gap: 0.85rem;
   overflow: auto;
   padding-right: 0.25rem;
+  min-height: 0;
+  flex: 1;
 }
 
 .find-food-card {
@@ -140,61 +139,140 @@
 }
 
 .find-food__map {
-  position: relative;
-  background: var(--fl-surface-muted);
+  position: sticky;
+  top: 5.5rem;
+  height: calc(100svh - 7.5rem);
+  max-height: calc(100svh - 7.5rem);
   border: 1px solid var(--fl-border);
+  overflow: hidden;
+  background: #0d3d2e;
 }
 
-.find-food__map .fl-map,
-.find-food__map .fl-map__canvas {
+.find-food__map-location {
+  position: absolute;
+  z-index: 3;
+  top: 1rem;
+  left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--fl-radius-pill);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--fl-border);
+  box-shadow: var(--fl-shadow);
+  color: var(--fl-green-800);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.find-food__map-location strong {
+  color: var(--fl-green-900);
+}
+
+.find-food__map-canvas {
+  position: relative;
+  width: 100%;
   height: 100%;
-  min-height: 560px;
-  border-radius: var(--fl-radius-lg);
 }
 
-.find-food__map-placeholder {
+.find-food__map-image {
+  width: 100%;
   height: 100%;
-  min-height: 560px;
-  padding: 2rem 1.75rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.65rem;
-  background:
-    radial-gradient(circle at 30% 20%, rgba(143, 220, 92, 0.2), transparent 40%),
-    linear-gradient(160deg, var(--fl-green-800), var(--fl-green-950));
-  color: var(--fl-text-on-dark);
+  object-fit: cover;
+  display: block;
 }
 
-.find-food__map-placeholder span {
+.find-food-card.is-active {
+  border-color: var(--fl-green-500);
+  box-shadow: 0 0 0 3px rgba(143, 220, 92, 0.28);
+}
+
+.find-food__map-pins {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.find-food__pin {
+  pointer-events: auto;
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--fl-lime);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  padding: 0;
+  z-index: 2;
+}
+
+.find-food__pin:hover,
+.find-food__pin.is-active {
+  background: #6fcf4a;
+  transform: rotate(-45deg) scale(1.18);
+  z-index: 4;
+}
+
+.find-food__pin-tip {
+  position: absolute;
+  left: 130%;
+  top: 50%;
+  transform: rotate(45deg) translateY(-50%);
+  min-width: 140px;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(8, 33, 23, 0.92);
+  color: #fff;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.find-food__pin:hover .find-food__pin-tip,
+.find-food__pin.is-active .find-food__pin-tip,
+.find-food__pin:focus-visible .find-food__pin-tip {
+  opacity: 1;
+}
+
+.find-food__pin-tip strong {
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1.2;
+}
+
+.find-food__pin-tip em {
+  display: block;
+  margin-top: 0.15rem;
+  font-style: normal;
+  font-size: 0.72rem;
   color: var(--fl-lime);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 
-.find-food__map-placeholder h2 {
-  color: var(--fl-text-on-dark);
-  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
-  max-width: 16ch;
-}
-
-.find-food__map-placeholder p {
-  color: rgba(245, 250, 247, 0.78);
-  max-width: 28rem;
-}
+.find-food__pin.is-1 { top: 28%; left: 42%; }
+.find-food__pin.is-2 { top: 46%; left: 58%; }
+.find-food__pin.is-3 { top: 62%; left: 36%; }
+.find-food__pin.is-4 { top: 38%; left: 68%; }
+.find-food__pin.is-5 { top: 55%; left: 48%; }
+.find-food__pin.is-6 { top: 70%; left: 62%; }
 
 @media (max-width: 960px) {
   .find-food__layout {
     grid-template-columns: 1fr;
   }
 
-  .find-food__list,
-  .find-food__map,
-  .find-food__map .fl-map,
-  .find-food__map .fl-map__canvas,
-  .find-food__map-placeholder {
-    min-height: 420px;
+  .find-food__list {
+    max-height: none;
+  }
+
+  .find-food__map {
+    position: relative;
+    top: auto;
+    height: min(52vh, 420px);
+    max-height: min(52vh, 420px);
   }
 }

@@ -17,18 +17,32 @@ function validateDriverId(req, res, next) {
   next();
 }
 
+function collectUpdates(body) {
+  const updates = {};
+  for (const key of UPDATABLE_FIELDS) {
+    if (body[key] !== undefined) {
+      updates[key] = body[key];
+    }
+  }
+  return updates;
+}
+
 function validateUpdateDriver(req, res, next) {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return next(new ApiError(400, "Driver id is invalid"));
   }
 
-  const updates = {};
-  for (const key of UPDATABLE_FIELDS) {
-    if (req.body[key] !== undefined) {
-      updates[key] = req.body[key];
-    }
+  const updates = collectUpdates(req.body);
+  if (Object.keys(updates).length === 0) {
+    return next(new ApiError(400, "No valid profile fields provided"));
   }
 
+  req.validatedUpdates = updates;
+  next();
+}
+
+function validateUpdateMyDriver(req, res, next) {
+  const updates = collectUpdates(req.body);
   if (Object.keys(updates).length === 0) {
     return next(new ApiError(400, "No valid profile fields provided"));
   }
@@ -40,4 +54,5 @@ function validateUpdateDriver(req, res, next) {
 module.exports = {
   validateDriverId,
   validateUpdateDriver,
+  validateUpdateMyDriver,
 };

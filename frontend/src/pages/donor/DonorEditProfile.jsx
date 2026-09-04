@@ -80,7 +80,7 @@ export default function DonorEditProfile() {
   return (
     <div className="donor-edit-profile">
       <div className="page donor-edit-profile__inner">
-        <header className="donor-edit-profile__intro">
+        <header className="donor-edit-profile__intro fl-hero-on-dark">
           <h1>
             Edit <span>Profile</span>
           </h1>

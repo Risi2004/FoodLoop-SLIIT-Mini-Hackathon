@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getDriverId } from '../api/client'
-import { getDriver } from '../api/drivers'
+import { getMyDriver } from '../api/drivers'
 import { getMyPickups } from '../api/pickups'
 import StatCard from '../components/pickups/StatCard'
 import ImpactProgress from '../components/pickups/ImpactProgress'
@@ -48,11 +47,8 @@ export default function Profile() {
       setLoading(true)
       setError('')
       try {
-        const driverId = getDriverId()
-        if (!driverId) throw new Error('VITE_DRIVER_ID is missing in frontend/.env')
-
         const [driverData, pickups] = await Promise.all([
-          getDriver(driverId),
+          getMyDriver(),
           getMyPickups(),
         ])
         if (!active) return
@@ -210,7 +206,7 @@ export default function Profile() {
             />
             <StatCard
               label="Distance Traveled"
-              value={`${stats.distanceKm ?? 0}KM`}
+              value={`${Number(stats.distanceKm ?? 0).toFixed(1)} KM`}
               trend="+5% vs average"
               icon={routeIcon}
             />

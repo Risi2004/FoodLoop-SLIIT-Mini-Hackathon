@@ -1,10 +1,21 @@
 .contact-page {
+  background: var(--fl-bg);
   padding-bottom: 2rem;
+}
+
+.contact-page__top {
+  background: linear-gradient(
+    180deg,
+    var(--fl-green-900) 0%,
+    var(--fl-green-950) 72%,
+    var(--fl-bg) 100%
+  );
 }
 
 .contact-page__intro {
   text-align: center;
-  padding-bottom: 0.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
 }
 
 .contact-page__intro h1 {
@@ -13,11 +24,12 @@
 }
 
 .contact-page__intro p {
-  color: rgba(245, 250, 247, 0.8);
+  color: rgba(245, 250, 247, 0.82);
   max-width: 36rem;
   margin: 0.75rem auto 0;
 }
 
-.fl-layout .contact-page .contact-section {
-  background: transparent;
+.contact-page .contact-section {
+  background: var(--fl-bg);
+  padding-top: 2.5rem;
 }

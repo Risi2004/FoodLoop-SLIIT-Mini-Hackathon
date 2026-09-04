@@ -13,31 +13,23 @@
 }
 
 .fl-layout--public .fl-layout__main {
-  padding-top: 5.5rem;
+  padding-top: 0;
 }
 
-.fl-layout--public .about-hero__copy h1,
-.fl-layout--public .contact-page__intro h1 {
-  color: var(--fl-green-900);
+.fl-layout--public .about-story-card h1,
+.fl-layout--public .contact-page__intro h1,
+.fl-layout--public .fl-hero-on-dark h1,
+.fl-layout--public .fl-hero-on-dark h2 {
+  color: var(--fl-text-on-dark);
 }
 
-.fl-layout--public .about-hero__copy > p:not(.about-kicker),
-.fl-layout--public .contact-page__intro p {
-  color: var(--fl-text-muted);
+.fl-layout--public .about-story-card > p,
+.fl-layout--public .contact-page__intro p,
+.fl-layout--public .fl-hero-on-dark p {
+  color: rgba(245, 250, 247, 0.82);
 }
 
-.fl-layout--public .about-kicker {
-  background: rgba(26, 107, 71, 0.12);
-  color: var(--fl-green-700);
-}
-
-.fl-layout--public .about-hero__stat {
-  background: var(--fl-surface);
-  border: 1px solid var(--fl-border);
-  color: var(--fl-text);
-}
-
-.fl-layout--public .about-hero__ghost {
-  color: var(--fl-green-800);
-  border-color: var(--fl-green-800);
+.fl-layout--public .fl-hero-on-dark h1 span,
+.fl-layout--public .about-story-card h1 span {
+  color: var(--fl-lime);
 }

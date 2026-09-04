@@ -127,21 +127,26 @@
   gap: 16px;
 }
 
-.form-group {
+/* Nested under dark card so global .form-group light-theme rules cannot win */
+.contact-form-card .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 0;
 }
 
-.form-group label {
+.contact-form-card .form-group label {
+  display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #cbd5e1;
+  color: rgba(245, 250, 247, 0.9);
+  margin-bottom: 0;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.contact-form-card .form-group input,
+.contact-form-card .form-group select,
+.contact-form-card .form-group textarea {
+  width: 100%;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-md);
@@ -151,20 +156,20 @@
   transition: all 0.25s ease;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+.contact-form-card .form-group input::placeholder,
+.contact-form-card .form-group textarea::placeholder {
+  color: rgba(255, 250, 247, 0.45);
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.contact-form-card .form-group input:focus,
+.contact-form-card .form-group select:focus,
+.contact-form-card .form-group textarea:focus {
   background: rgba(255, 255, 255, 0.12);
   border-color: #4ade80;
   box-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
 }
 
-.form-group select option {
+.contact-form-card .form-group select option {
   background-color: #0f2e22;
   color: #ffffff;
 }

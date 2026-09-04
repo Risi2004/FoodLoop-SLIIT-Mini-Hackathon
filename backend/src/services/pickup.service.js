@@ -157,7 +157,7 @@ async function completePickup(pickupId, driverId) {
 
   const nowLabel = new Date().toLocaleString();
   const mealsSaved = Math.max(1, Math.round((pickup.weightKg || 1) * 2));
-  const traveledKm = pickup.distanceKm || 0;
+  const traveledKm = Number((pickup.distanceKm || 0).toFixed(1));
 
   if (pickup.dropoffLocation?.lat != null) {
     pickup.driverLocation = {

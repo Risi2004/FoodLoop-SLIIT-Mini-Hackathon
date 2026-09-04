@@ -1,21 +1,12 @@
-import { apiRequest, getDriverId } from './client'
-
-function requireDriverId() {
-  const driverId = getDriverId()
-  if (!driverId) {
-    throw new Error(
-      'VITE_DRIVER_ID is missing. Run backend seed and set it in frontend/.env'
-    )
-  }
-  return driverId
-}
+import { apiRequest } from './client'
+import { resolveDriverId } from './drivers'
 
 export function getAvailablePickups() {
   return apiRequest('/api/pickups/available')
 }
 
-export function confirmPickup(pickupId) {
-  const driverId = requireDriverId()
+export async function confirmPickup(pickupId) {
+  const driverId = await resolveDriverId()
 
   return apiRequest(`/api/pickups/${pickupId}/confirm`, {
     method: 'POST',
@@ -23,8 +14,8 @@ export function confirmPickup(pickupId) {
   })
 }
 
-export function updateDriverLocation(pickupId, { lat, lng }) {
-  const driverId = requireDriverId()
+export async function updateDriverLocation(pickupId, { lat, lng }) {
+  const driverId = await resolveDriverId()
 
   return apiRequest(`/api/pickups/${pickupId}/location`, {
     method: 'PATCH',
@@ -32,8 +23,8 @@ export function updateDriverLocation(pickupId, { lat, lng }) {
   })
 }
 
-export function completePickup(pickupId) {
-  const driverId = requireDriverId()
+export async function completePickup(pickupId) {
+  const driverId = await resolveDriverId()
 
   return apiRequest(`/api/pickups/${pickupId}/complete`, {
     method: 'POST',
@@ -41,8 +32,8 @@ export function completePickup(pickupId) {
   })
 }
 
-export function getMyPickups() {
-  const driverId = requireDriverId()
+export async function getMyPickups() {
+  const driverId = await resolveDriverId()
   return apiRequest(`/api/pickups/my/${driverId}`)
 }
 
