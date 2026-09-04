@@ -56,13 +56,11 @@ exports.claimDonation = async (req, res) => {
   }
 
   try {
-    // Get receiver profile
     const receiver = await Receiver.findOne({ userId: req.user.id });
     if (!receiver) {
       return res.status(403).json({ error: 'Receiver profile not found' });
     }
 
-    // Atomic update: decrement remainingQuantity if sufficient
     const updatedDonation = await Donation.findOneAndUpdate(
       {
         _id: donationId,
@@ -79,7 +77,6 @@ exports.claimDonation = async (req, res) => {
       });
     }
 
-    // Create a claim record
     const claim = new DonationClaim({
       donationId: donationId,
       receiverId: receiver._id,
@@ -88,7 +85,6 @@ exports.claimDonation = async (req, res) => {
     });
     await claim.save();
 
-    // If fully claimed, mark as fulfilled
     if (updatedDonation.remainingQuantity === 0) {
       await Donation.findByIdAndUpdate(donationId, { status: 'fulfilled' });
     }
@@ -114,6 +110,61 @@ exports.getDonorDonations = async (req, res) => {
     const donations = await Donation.find({ donorId: donor._id })
       .sort({ createdAt: -1 });
     res.json(donations);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// Update donation (donor only)
+exports.updateDonation = async (req, res) => {
+  const donationId = req.params.id;
+  const { foodName, description, pickupAddress, expiryDate, unit } = req.body;
+
+  try {
+    const donation = await Donation.findById(donationId);
+    if (!donation) {
+      return res.status(404).json({ error: 'Donation not found' });
+    }
+
+    const donor = await Donor.findOne({ userId: req.user.id });
+    if (!donor || donation.donorId.toString() !== donor._id.toString()) {
+      return res.status(403).json({ error: 'You are not authorized to update this donation' });
+    }
+
+    if (foodName) donation.foodName = foodName;
+    if (description) donation.description = description;
+    if (pickupAddress) donation.pickupAddress = pickupAddress;
+    if (expiryDate) donation.expiryDate = expiryDate;
+    if (unit) donation.unit = unit;
+
+    await donation.save();
+    res.json({ message: 'Donation updated successfully', donation });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// Delete donation (donor only)
+exports.deleteDonation = async (req, res) => {
+  const donationId = req.params.id;
+
+  try {
+    const donation = await Donation.findById(donationId);
+    if (!donation) {
+      return res.status(404).json({ error: 'Donation not found' });
+    }
+
+    const donor = await Donor.findOne({ userId: req.user.id });
+    if (!donor || donation.donorId.toString() !== donor._id.toString()) {
+      return res.status(403).json({ error: 'You are not authorized to delete this donation' });
+    }
+
+    await DonationClaim.deleteMany({ donationId: donation._id });
+    await donation.deleteOne();
+
+    res.json({ message: 'Donation and all associated claims deleted successfully' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });

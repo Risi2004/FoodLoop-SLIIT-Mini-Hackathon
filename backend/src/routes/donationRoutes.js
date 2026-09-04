@@ -5,21 +5,19 @@ const {
   createDonation,
   getActiveDonations,
   claimDonation,
-  getDonorDonations   // <-- new function
+  getDonorDonations,
+  updateDonation,
+  deleteDonation
 } = require('../controllers/donationController');
 
-// ----- Routes -----
-
-// Donor: Create a new donation
+// ----- Donor routes -----
 router.post('/', auth, verifyDonor, createDonation);
-
-// Donor: Get their own donations
 router.get('/mine', auth, verifyDonor, getDonorDonations);
+router.put('/:id', auth, verifyDonor, updateDonation);
+router.delete('/:id', auth, verifyDonor, deleteDonation);
 
-// Receiver: Get all active donations
+// ----- Receiver routes -----
 router.get('/', auth, verifyReceiver, getActiveDonations);
-
-// Receiver: Claim a donation (must be after /mine)
 router.put('/:id/claim', auth, verifyReceiver, claimDonation);
 
 module.exports = router;
