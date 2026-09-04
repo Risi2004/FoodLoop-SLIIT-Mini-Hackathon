@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const authRoutes = require('./auth.routes');
+const pickupRoutes = require('./pickup.routes');
+const driverRoutes = require('./driver.routes');
 
 // Healthcheck Route
 router.get('/health', (req, res) => {
@@ -13,5 +15,9 @@ router.get('/health', (req, res) => {
 
 // Authentication Routes Mount
 router.use('/auth', authRoutes);
+
+// Driver management Routes
+router.use('/pickups', pickupRoutes);
+router.use('/drivers', driverRoutes);
 
 module.exports = router;

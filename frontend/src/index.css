@@ -1,34 +1,33 @@
 :root {
-  /* Brand Color Palette */
+  /* Auth / landing brand tokens */
   --primary: #15803d;
   --primary-dark: #0f2e22;
   --primary-deep: #081d15;
   --primary-light: #22c55e;
   --primary-glow: rgba(34, 197, 94, 0.25);
-  
+
   --emerald-card: #0f3d2e;
   --emerald-card-hover: #134e3b;
   --emerald-gradient: linear-gradient(135deg, #103b2b 0%, #0a261c 100%);
-  
+
   --accent-green: #10b981;
   --accent-lime: #84cc16;
   --accent-neon: #4ade80;
-  
+
   --bg-dark: #071912;
   --bg-body: #ffffff;
   --bg-subtle: #f8faf9;
   --bg-card: #ffffff;
-  
+
   --text-main: #1e293b;
   --text-muted: #64748b;
   --text-light: #f8fafc;
   --text-dim: #94a3b8;
-  
+
   --border-light: #e2e8f0;
   --border-dark: rgba(255, 255, 255, 0.12);
   --border-glow: rgba(74, 222, 128, 0.3);
-  
-  /* Status Colors */
+
   --status-red: #ef4444;
   --status-red-bg: rgba(239, 68, 68, 0.15);
   --status-orange: #f59e0b;
@@ -39,12 +38,10 @@
   --status-blue-bg: rgba(59, 130, 246, 0.15);
   --status-teal: #0d9488;
   --status-teal-bg: rgba(13, 148, 136, 0.15);
-  
-  /* Typography */
+
   --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-  
-  /* Layout */
+
   --container-max: 1280px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --radius-sm: 8px;
@@ -52,14 +49,47 @@
   --radius-lg: 20px;
   --radius-xl: 28px;
   --radius-full: 9999px;
-  
+
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 20px 40px -15px rgba(16, 59, 43, 0.2);
   --shadow-glow: 0 0 25px rgba(34, 197, 94, 0.35);
+
+  /* Driver management brand tokens */
+  --fl-green-950: #06241c;
+  --fl-green-900: #0a3328;
+  --fl-green-800: #0d3d2e;
+  --fl-green-700: #145239;
+  --fl-green-600: #1a6b47;
+  --fl-green-500: #2d8f5f;
+  --fl-lime: #8fdc5c;
+  --fl-lime-bright: #a8e86e;
+  --fl-lime-soft: #d4f5b8;
+
+  --fl-bg: #f3f6f4;
+  --fl-surface: #ffffff;
+  --fl-surface-muted: #eef3f0;
+  --fl-text: #1a2420;
+  --fl-text-muted: #5c6b64;
+  --fl-text-on-dark: #f5faf7;
+  --fl-border: #d5e0da;
+  --fl-danger: #e04545;
+
+  --fl-radius-sm: 10px;
+  --fl-radius: 16px;
+  --fl-radius-lg: 24px;
+  --fl-radius-pill: 999px;
+
+  --fl-shadow: 0 8px 28px rgba(10, 51, 40, 0.08);
+  --fl-shadow-lg: 0 16px 40px rgba(10, 51, 40, 0.14);
+
+  --font-sans: 'DM Sans', sans-serif;
+  --font-display: 'Outfit', sans-serif;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -70,6 +100,12 @@ html {
   font-size: 16px;
 }
 
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
 body {
   font-family: var(--font-body);
   color: var(--text-main);
@@ -78,16 +114,22 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  min-height: 100svh;
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.25;
@@ -109,10 +151,17 @@ button {
   transition: var(--transition);
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: var(--font-body);
   outline: none;
   transition: var(--transition);
+}
+
+img {
+  max-width: 100%;
+  display: block;
 }
 
 .container {
@@ -124,7 +173,6 @@ input, textarea, select {
   padding-right: 24px;
 }
 
-/* Utilities */
 .text-gradient {
   background: linear-gradient(135deg, #15803d 0%, #22c55e 100%);
   -webkit-background-clip: text;
@@ -143,4 +191,55 @@ input, textarea, select {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Driver shell keeps its own typography without affecting landing/auth pages */
+.fl-layout {
+  font-family: var(--font-sans);
+  color: var(--fl-text);
+  background: var(--fl-bg);
+  line-height: 1.5;
+}
+
+.fl-layout h1,
+.fl-layout h2,
+.fl-layout h3,
+.fl-layout h4 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  color: var(--fl-text);
+}
+
+.fl-layout button,
+.fl-layout input,
+.fl-layout textarea,
+.fl-layout select {
+  font: inherit;
+}
+
+/* Driver page helpers */
+.page {
+  width: min(1180px, calc(100% - 2rem));
+  margin-inline: auto;
+  padding-block: 2rem 3rem;
+}
+
+.page-stub {
+  background: var(--fl-surface);
+  border: 1px solid var(--fl-border);
+  border-radius: var(--fl-radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--fl-shadow);
+}
+
+.page-stub h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  color: var(--fl-green-700);
+  margin-bottom: 0.5rem;
+}
+
+.page-stub p {
+  color: var(--fl-text-muted);
+  max-width: 42rem;
 }

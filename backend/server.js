@@ -40,13 +40,13 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Root welcome route
 app.get('/', (req, res) => {
   res.json({
-    message: 'FoodLoop API Gateway is running 🚀',
+    message: 'FoodLoop API Gateway is running',
     version: '1.0.0',
     documentation: '/api/health'
   });
 });
 
-// API Routes
+// API Routes (auth + driver/pickup)
 app.use('/api', apiRouter);
 
 // Catch 404 and forward to error handler
@@ -62,5 +62,5 @@ const PORT = process.env.PORT || 5000;
 
 // Start Server
 app.listen(PORT, () => {
-  console.log(`🚀 FoodLoop Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  console.log(`FoodLoop Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
