@@ -3,7 +3,7 @@ import Logo from '../Logo'
 import './Header.css'
 
 const NAV_LINKS = [
-  { to: '/', label: 'Home', end: true },
+  { to: '/driver', label: 'Home', end: true },
   { to: '/about', label: 'About us' },
   { to: '/contact', label: 'Contact us' },
   { to: '/delivery', label: 'Delivery' },
@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <header className="fl-header">
       <div className="fl-header__inner">
-        <NavLink to="/" className="fl-header__brand" aria-label="FoodLoop home">
+        <NavLink to="/driver" className="fl-header__brand" aria-label="FoodLoop driver home">
           <Logo />
         </NavLink>
 

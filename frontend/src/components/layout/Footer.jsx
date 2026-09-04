@@ -3,7 +3,7 @@ import Logo from '../Logo'
 import './Footer.css'
 
 const QUICK_LINKS = [
-  { to: '/', label: 'Home' },
+  { to: '/driver', label: 'Home' },
   { to: '/about', label: 'About Us' },
   { to: '/contact', label: 'Contact Us' },
   { to: '/delivery', label: 'Delivery' },
