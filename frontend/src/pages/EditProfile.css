@@ -21,6 +21,16 @@
   color: rgba(245, 250, 247, 0.75);
 }
 
+.edit-profile-page__error {
+  margin-top: 1rem;
+  background: #fde8e8;
+  border: 1px solid #f5b5b5;
+  color: var(--fl-danger);
+  border-radius: var(--fl-radius-sm);
+  padding: 0.7rem 0.85rem;
+  font-weight: 600;
+}
+
 .edit-profile-page__layout {
   margin-top: 1.35rem;
   display: grid;

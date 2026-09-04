@@ -1,9 +1,8 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { driverProfile } from '../data/mockDriverProfile'
-import {
-  completedPickups,
-  driverStats,
-} from '../data/mockDriverPickups'
+import { getDriverId } from '../api/client'
+import { getDriver } from '../api/drivers'
+import { getMyPickups } from '../api/pickups'
 import StatCard from '../components/pickups/StatCard'
 import ImpactProgress from '../components/pickups/ImpactProgress'
 import HistoryCard from '../components/pickups/HistoryCard'
@@ -37,7 +36,72 @@ const mealsIcon = (
 )
 
 export default function Profile() {
-  const recentMissions = completedPickups.slice(0, 3)
+  const [driver, setDriver] = useState(null)
+  const [recentMissions, setRecentMissions] = useState([])
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let active = true
+
+    async function load() {
+      setLoading(true)
+      setError('')
+      try {
+        const driverId = getDriverId()
+        if (!driverId) throw new Error('VITE_DRIVER_ID is missing in frontend/.env')
+
+        const [driverData, pickups] = await Promise.all([
+          getDriver(driverId),
+          getMyPickups(),
+        ])
+        if (!active) return
+
+        setDriver(driverData)
+        setRecentMissions(
+          (pickups.completed || []).slice(0, 3).map((pickup) => ({
+            id: pickup._id,
+            donorName: pickup.donorName,
+            itemLabel: pickup.itemLabel,
+            weightKg: pickup.weightKg,
+            distanceKm: pickup.distanceKm,
+            deliveredLabel: `Delivered ${new Date(pickup.updatedAt).toLocaleDateString()}`,
+          }))
+        )
+      } catch (err) {
+        if (!active) return
+        setError(err.message || 'Failed to load profile')
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+
+    load()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const stats = driver?.stats || {}
+  const joinedLabel = driver?.joinedAt
+    ? `Joined ${new Date(driver.joinedAt).toLocaleString('en', { month: 'short', year: 'numeric' })}`
+    : ''
+
+  if (loading) {
+    return (
+      <div className="page profile-page">
+        <p>Loading profile...</p>
+      </div>
+    )
+  }
+
+  if (error || !driver) {
+    return (
+      <div className="page profile-page">
+        <p>{error || 'Driver not found'}</p>
+      </div>
+    )
+  }
 
   return (
     <div className="page profile-page">
@@ -52,9 +116,9 @@ export default function Profile() {
             </svg>
           </div>
           <div>
-            <h1>{driverProfile.name}</h1>
+            <h1>{driver.name}</h1>
             <p>
-              {driverProfile.role} • {driverProfile.joinedLabel}
+              {driver.role} • {joinedLabel}
             </p>
             <Link to="/profile/edit" className="profile-hero__edit">
               Edit
@@ -65,8 +129,8 @@ export default function Profile() {
         <aside className="profile-verification">
           <h2>Verification</h2>
           <div className="profile-verification__list">
-            {driverProfile.verification.map((item) => (
-              <article key={item.id} className="profile-verification__card">
+            {(driver.verification || []).map((item) => (
+              <article key={item.title} className="profile-verification__card">
                 <span className="profile-verification__check" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="16" height="16">
                     <path
@@ -92,15 +156,15 @@ export default function Profile() {
             <dl>
               <div>
                 <dt>Email</dt>
-                <dd>{driverProfile.email}</dd>
+                <dd>{driver.email}</dd>
               </div>
               <div>
                 <dt>Contact No</dt>
-                <dd>{driverProfile.contactNo}</dd>
+                <dd>{driver.contactNo}</dd>
               </div>
               <div>
                 <dt>Address</dt>
-                <dd>{driverProfile.address}</dd>
+                <dd>{driver.address}</dd>
               </div>
             </dl>
           </article>
@@ -108,8 +172,8 @@ export default function Profile() {
           <article className="profile-badges-card">
             <h2>Achievements & Badges</h2>
             <div className="profile-badges">
-              {driverProfile.badges.map((badge) => (
-                <div key={badge.id} className="profile-badge">
+              {(driver.badges || []).map((badge) => (
+                <div key={badge.label} className="profile-badge">
                   <span className="profile-badge__icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="22" height="22">
                       <path
@@ -125,9 +189,9 @@ export default function Profile() {
           </article>
 
           <ImpactProgress
-            current={driverStats.impactCurrent}
-            goal={driverStats.impactGoal}
-            badge={driverStats.impactBadge}
+            current={stats.impactCurrent ?? 0}
+            goal={stats.impactGoal ?? 15}
+            badge={stats.impactBadge ?? 'Community Hero'}
           />
         </aside>
 
@@ -135,20 +199,20 @@ export default function Profile() {
           <div className="profile-stats">
             <StatCard
               label="Deliveries Completed"
-              value={driverStats.deliveriesCompleted}
-              trend={driverStats.deliveriesTrend}
+              value={stats.deliveriesCompleted ?? 0}
+              trend="+12% this month"
               icon={truckIcon}
             />
             <StatCard
               label="Distance Traveled"
-              value={`${driverStats.distanceKm}KM`}
-              trend={driverStats.distanceTrend}
+              value={`${stats.distanceKm ?? 0}KM`}
+              trend="+5% vs average"
               icon={routeIcon}
             />
             <StatCard
               label="Meals Saved"
-              value={driverProfile.mealsSaved}
-              trend={driverProfile.mealsTrend}
+              value={stats.mealsSaved ?? 0}
+              trend="+15% impact"
               icon={mealsIcon}
             />
           </div>

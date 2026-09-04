@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { trackingDetails } from '../data/mockTracking'
-import { driverStats } from '../data/mockDriverPickups'
+import { getTracking } from '../api/pickups'
 import TrackingMap from '../components/tracking/TrackingMap'
 import LiveJourney from '../components/tracking/LiveJourney'
 import ImpactProgress from '../components/pickups/ImpactProgress'
@@ -8,7 +8,45 @@ import './Tracking.css'
 
 export default function Tracking() {
   const { id } = useParams()
-  const tracking = trackingDetails[id] ?? trackingDetails['FL-8829-01']
+  const [pickup, setPickup] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let active = true
+
+    async function load() {
+      setLoading(true)
+      setError('')
+      try {
+        const data = await getTracking(id)
+        if (!active) return
+        setPickup(data)
+      } catch (err) {
+        if (!active) return
+        setError(err.message || 'Failed to load tracking')
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+
+    load()
+    return () => {
+      active = false
+    }
+  }, [id])
+
+  const driver = pickup?.driver || {}
+  const stats = driver.stats || {}
+  const journey = (pickup?.journey || []).map((step, index) => ({
+    id: `step-${index}`,
+    title: step.title,
+    detail: step.detail,
+    time: step.timeLabel,
+    status: step.status,
+    tone: step.tone,
+    badge: step.badge,
+  }))
 
   return (
     <div className="page tracking-page">
@@ -25,84 +63,84 @@ export default function Tracking() {
               Back to My pickups
             </Link>
             <p className="tracking-shell__id">
-              Tracking ID: <strong>#{tracking.trackingId}</strong>
+              Tracking ID:{' '}
+              <strong>#{pickup?.trackingId || id}</strong>
             </p>
           </div>
 
           <button type="button" className="tracking-shell__help">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M12 2a7 7 0 0 0-7 7v2H4v8h16v-8h-1V9a7 7 0 0 0-7-7Zm-3 9h6v1.5a3 3 0 0 1-6 0V11Zm3 9a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2Z"
-              />
-            </svg>
             Get Help
           </button>
         </div>
 
-        <div className="tracking-shell__body">
-          <TrackingMap />
+        {error && <p className="tracking-shell__error">{error}</p>}
+        {loading && <p className="tracking-shell__status">Loading tracking...</p>}
 
-          <aside className="tracking-panel">
-            <article className="tracking-card">
-              <div className="tracking-card__row">
-                <div>
-                  <p className="tracking-card__label">Current Location</p>
-                  <p className="tracking-card__value">
-                    {tracking.distanceToRecipient} to recipient (
-                    {tracking.recipientLabel})
-                  </p>
-                </div>
-                <div className="tracking-card__driver">
-                  <span className="tracking-card__avatar" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18">
-                      <path
-                        fill="currentColor"
-                        d="M12 12a4.5 4.5 0 1 0-4.5-4.5A4.5 4.5 0 0 0 12 12Zm0 2.25c-4 0-7.5 2-7.5 4.5V21h15v-2.25c0-2.5-3.5-4.5-7.5-4.5Z"
-                      />
-                    </svg>
-                  </span>
+        {!loading && pickup && (
+          <div className="tracking-shell__body">
+            <TrackingMap />
+
+            <aside className="tracking-panel">
+              <article className="tracking-card">
+                <div className="tracking-card__row">
                   <div>
-                    <strong>{tracking.driver.name}</strong>
-                    <span>({tracking.driver.role})</span>
+                    <p className="tracking-card__label">Current Location</p>
+                    <p className="tracking-card__value">
+                      {pickup.distanceKm}km to recipient (
+                      {pickup.recipientLabel || 'Destination'})
+                    </p>
+                  </div>
+                  <div className="tracking-card__driver">
+                    <span className="tracking-card__avatar" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path
+                          fill="currentColor"
+                          d="M12 12a4.5 4.5 0 1 0-4.5-4.5A4.5 4.5 0 0 0 12 12Zm0 2.25c-4 0-7.5 2-7.5 4.5V21h15v-2.25c0-2.5-3.5-4.5-7.5-4.5Z"
+                        />
+                      </svg>
+                    </span>
+                    <div>
+                      <strong>{driver.name || 'Driver'}</strong>
+                      <span>({driver.role || 'Volunteer'})</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="tracking-card__meta-grid">
-                <p>
-                  <span>Vehicle Type</span>
-                  <strong>{tracking.vehicleType}</strong>
-                </p>
-                <p>
-                  <span>Vehicle Number</span>
-                  <strong>{tracking.vehicleNumber}</strong>
-                </p>
-              </div>
-            </article>
+                <div className="tracking-card__meta-grid">
+                  <p>
+                    <span>Vehicle Type</span>
+                    <strong>{driver.vehicleType || 'scooter'}</strong>
+                  </p>
+                  <p>
+                    <span>Vehicle Number</span>
+                    <strong>{driver.vehicleNumber || '—'}</strong>
+                  </p>
+                </div>
+              </article>
 
-            <article className="tracking-card tracking-card--item">
-              <div className="tracking-card__item-media" aria-hidden="true" />
-              <div>
-                <h3>
-                  {tracking.item.name} ({tracking.item.quantityLabel})
-                </h3>
-                <p>Claimed by {tracking.item.claimedBy}</p>
-                <span className="tracking-card__chip">
-                  {tracking.item.availableLabel}
-                </span>
-              </div>
-            </article>
+              <article className="tracking-card tracking-card--item">
+                <div className="tracking-card__item-media" aria-hidden="true" />
+                <div>
+                  <h3>
+                    {pickup.itemLabel} ({pickup.weightKg} kg)
+                  </h3>
+                  <p>From {pickup.donorName}</p>
+                  <span className="tracking-card__chip">
+                    Status: {pickup.status}
+                  </span>
+                </div>
+              </article>
 
-            <LiveJourney steps={tracking.journey} />
+              <LiveJourney steps={journey} />
 
-            <ImpactProgress
-              current={driverStats.impactCurrent}
-              goal={driverStats.impactGoal}
-              badge={driverStats.impactBadge}
-            />
-          </aside>
-        </div>
+              <ImpactProgress
+                current={stats.impactCurrent ?? 0}
+                goal={stats.impactGoal ?? 15}
+                badge={stats.impactBadge ?? 'Community Hero'}
+              />
+            </aside>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -27,3 +27,7 @@ export function getMyPickups() {
   const driverId = requireDriverId()
   return apiRequest(`/api/pickups/my/${driverId}`)
 }
+
+export function getTracking(trackingId) {
+  return apiRequest(`/api/pickups/tracking/${trackingId}`)
+}
