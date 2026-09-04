@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const connectDB = require("./config/db");
 const pickupRoutes = require("./routes/pickups");
+const driverRoutes = require("./routes/drivers");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/pickups", pickupRoutes);
+app.use("/api/drivers", driverRoutes);
 
 const PORT = process.env.PORT || 5000;
 
