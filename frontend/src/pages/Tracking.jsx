@@ -49,7 +49,8 @@ export default function Tracking() {
   }))
 
   return (
-    <div className="page tracking-page">
+    <div className="tracking-page">
+      <div className="page tracking-page__inner">
       <div className="tracking-shell">
         <div className="tracking-shell__top">
           <div>
@@ -141,6 +142,7 @@ export default function Tracking() {
             </aside>
           </div>
         )}
+      </div>
       </div>
     </div>
   )

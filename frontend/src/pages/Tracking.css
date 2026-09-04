@@ -1,13 +1,18 @@
 .tracking-page {
-  padding-top: 1.5rem;
+  background: linear-gradient(160deg, #0f2f24 0%, #0a241c 55%, #123528 100%);
+  padding-block: 1.5rem 3rem;
+}
+
+.tracking-page__inner {
+  padding-block: 0;
 }
 
 .tracking-shell {
-  background: var(--fl-surface-muted);
-  border: 1px solid var(--fl-border);
+  background: rgba(236, 242, 238, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: var(--fl-radius-lg);
   padding: 1rem 1.1rem 1.2rem;
-  box-shadow: var(--fl-shadow);
+  box-shadow: var(--fl-shadow-lg);
 }
 
 .tracking-shell__top {

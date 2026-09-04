@@ -89,22 +89,27 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="page profile-page">
-        <p>Loading profile...</p>
+      <div className="profile-page">
+        <div className="page profile-page__inner">
+          <p className="profile-status">Loading profile...</p>
+        </div>
       </div>
     )
   }
 
   if (error || !driver) {
     return (
-      <div className="page profile-page">
-        <p>{error || 'Driver not found'}</p>
+      <div className="profile-page">
+        <div className="page profile-page__inner">
+          <p className="profile-status">{error || 'Driver not found'}</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="page profile-page">
+    <div className="profile-page">
+      <div className="page profile-page__inner">
       <section className="profile-hero">
         <div className="profile-hero__identity">
           <div className="profile-hero__avatar" aria-hidden="true">
@@ -229,6 +234,7 @@ export default function Profile() {
             </div>
           </section>
         </div>
+      </div>
       </div>
     </div>
   )

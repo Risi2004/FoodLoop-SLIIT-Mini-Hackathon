@@ -106,8 +106,8 @@ export default function MyPickups() {
   const activePickup = inTransit[0] || null
 
   return (
-    <div className="page my-pickups-page">
-      <div className="my-pickups-page__layout">
+    <div className="my-pickups-page">
+      <div className="page my-pickups-page__inner my-pickups-page__layout">
         <aside className="my-pickups-sidebar">
           <h1>My pickups</h1>
 
@@ -164,3 +164,4 @@ export default function MyPickups() {
     </div>
   )
 }
+

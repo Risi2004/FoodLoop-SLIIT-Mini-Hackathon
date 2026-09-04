@@ -48,6 +48,7 @@ export default function Header() {
           </NavLink>
 
           <NavLink to="/profile" className="fl-header__profile">
+            <span>User_Name</span>
             <span className="fl-header__avatar" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="18" height="18">
                 <path
@@ -56,7 +57,6 @@ export default function Header() {
                 />
               </svg>
             </span>
-            <span>User_Name</span>
           </NavLink>
         </div>
       </div>

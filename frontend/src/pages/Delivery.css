@@ -15,6 +15,11 @@
   flex-direction: column;
   gap: 0.9rem;
   min-height: 0;
+  background: var(--fl-surface-muted);
+  border: 1px solid var(--fl-border);
+  border-radius: var(--fl-radius-lg);
+  padding: 1.1rem;
+  box-shadow: var(--fl-shadow);
 }
 
 .delivery-list__header {
