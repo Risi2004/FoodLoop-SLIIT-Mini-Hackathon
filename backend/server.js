@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
+const pickupRoutes = require("./routes/pickups");
 
 const app = express();
 
@@ -14,6 +15,8 @@ app.get("/", (req, res) => {
     message: "FoodLoop driver API is running",
   });
 });
+
+app.use("/api/pickups", pickupRoutes);
 
 const PORT = process.env.PORT || 5000;
 
